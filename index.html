@@ -35,8 +35,8 @@
   /* ── Fixed costs ── */
   .fixed-costs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 28px; }
   .fc-card {
-    background: #fff;
-    border: 1px solid rgba(0,0,0,0.08);
+    background: rgba(255,255,210,1);
+    border: 1px solid rgba(0,0,0,0.1);
     border-radius: 12px;
     padding: 14px 16px;
     text-align: center;
@@ -51,7 +51,7 @@
     padding: 12px 8px 10px;
     border: 1.5px solid rgba(0,0,0,0.12);
     border-radius: 12px;
-    background: #fff;
+    background: rgba(255,255,210,1);
     cursor: pointer;
     text-align: center;
     transition: all 0.15s;
@@ -59,13 +59,13 @@
   .tab:hover { border-color: rgba(0,0,0,0.25); }
   .tab-name { font-size: 13px; font-weight: 700; color: #333; display: block; margin-bottom: 2px; }
   .tab-sub { font-size: 11px; color: #999; display: block; }
-  .tab.act-a { border-color: #1d9e75; background: #f0faf6; }
+  .tab.act-a { border-color: #1d9e75; background: #d4f2e7; }
   .tab.act-a .tab-name { color: #085041; }
   .tab.act-a .tab-sub { color: #1d9e75; }
-  .tab.act-b { border-color: #2c7be5; background: #f0f6ff; }
+  .tab.act-b { border-color: #2c7be5; background: #d6e9ff; }
   .tab.act-b .tab-name { color: #0c447c; }
   .tab.act-b .tab-sub { color: #2c7be5; }
-  .tab.act-c { border-color: #c98a16; background: #fffbf0; }
+  .tab.act-c { border-color: #c98a16; background: #fde9b8; }
   .tab.act-c .tab-name { color: #7a4e08; }
   .tab.act-c .tab-sub { color: #c98a16; }
 
@@ -74,8 +74,8 @@
   .panel.visible { display: block; }
 
   .panel-card {
-    background: #fff;
-    border: 1px solid rgba(0,0,0,0.08);
+    background: rgba(255,255,230,1);
+    border: 1px solid rgba(0,0,0,0.1);
     border-radius: 16px;
     overflow: hidden;
   }
@@ -94,8 +94,8 @@
   /* ── Breakdown table ── */
   .section-head {
     padding: 8px 22px;
-    font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: #aaa;
-    background: #fafafa; border-bottom: 1px solid rgba(0,0,0,0.06);
+    font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: #999;
+    background: rgba(255,255,200,1); border-bottom: 1px solid rgba(0,0,0,0.07);
   }
   .brow { display: flex; align-items: center; justify-content: space-between; padding: 12px 22px; border-bottom: 1px solid rgba(0,0,0,0.05); }
   .brow:last-child { border-bottom: none; }
@@ -105,10 +105,10 @@
   .brow-val { font-size: 14px; font-weight: 600; color: #111; }
   .brow-val.muted { color: #bbb; font-weight: 400; font-style: italic; font-size: 13px; }
   .brow-val.red { color: #c0392b; }
-  .brow.total-row { background: #f7f7f5; }
+  .brow.total-row { background: rgba(255,255,200,1); }
   .brow.total-row .brow-name { font-weight: 700; color: #111; font-size: 14px; }
   .brow.total-row .brow-val { font-size: 15px; }
-  .brow.highlight { background: #fff8ec; }
+  .brow.highlight { background: #fff0cc; }
   .brow.highlight .brow-name { font-weight: 700; color: #7a4e08; }
 
   /* ── Results ── */
@@ -137,7 +137,7 @@
   /* ── Formula ── */
   .formula-row {
     padding: 12px 22px;
-    background: #f7f7f5;
+    background: rgba(255,255,200,1);
     border-top: 1px solid rgba(0,0,0,0.06);
     text-align: center;
     font-family: 'Courier New', monospace;
@@ -165,14 +165,14 @@
     <div class="fc-card">
       <div class="fc-label">COGS</div>
       <div class="fc-val">$6.50</div>
-      <div class="fc-desc">Ingredients & packaging</div>
+      <div class="fc-desc">Ingredients &amp; packaging</div>
     </div>
     <div class="fc-card">
       <div class="fc-label">Box + Labor</div>
       <div class="fc-val">$2.50</div>
       <div class="fc-desc">Fulfillment costs</div>
     </div>
-    <div class="fc-card" style="border-color: rgba(0,0,0,0.15); background:#f7f7f5;">
+    <div class="fc-card" style="background: rgba(255,255,190,1); border-color: rgba(0,0,0,0.15);">
       <div class="fc-label">Fixed Total</div>
       <div class="fc-val">$9.00</div>
       <div class="fc-desc">Combined fixed costs</div>
