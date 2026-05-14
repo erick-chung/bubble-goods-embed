@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Gourmet Garden Pricing Guide</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; background: #fff; color: #1a1a1a; }
+
+  .wrap { max-width: 640px; margin: 0 auto; padding: 28px 20px 36px; }
+
+  .header { text-align: center; margin-bottom: 24px; }
+  .brand { font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #0f6e56; margin-bottom: 6px; }
+  .main-title { font-size: 20px; font-weight: 700; color: #111; margin-bottom: 6px; }
+  .main-sub { font-size: 14px; color: #666; }
+
+  .fixed-costs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 24px; }
+  .fc-card { background: #f5f5f3; border-radius: 10px; padding: 12px 14px; text-align: center; }
+  .fc-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; color: #888; margin-bottom: 5px; }
+  .fc-val { font-size: 22px; font-weight: 700; color: #111; }
+
+  .divider-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; color: #888; background: #f9f9f7; padding: 7px 16px; border-bottom: 1px solid #ebebeb; }
+
+  .tabs { display: flex; gap: 8px; margin-bottom: 16px; }
+  .tab { flex: 1; padding: 10px 6px; border: 1.5px solid #ddd; border-radius: 10px; background: #fff; cursor: pointer; font-size: 12px; font-weight: 600; color: #888; line-height: 1.4; transition: all 0.15s; text-align: center; }
+  .tab:hover { border-color: #bbb; color: #555; }
+  .tab.act-a { border-color: #1d9e75; color: #085041; background: #edf9f4; }
+  .tab.act-b { border-color: #2c7be5; color: #0c447c; background: #e8f1fb; }
+  .tab.act-c { border-color: #c98a16; color: #7a4e08; background: #fef3dc; }
+
+  .panel { display: none; }
+  .panel.visible { display: block; }
+
+  .badge { display: inline-block; font-size: 11px; font-weight: 700; padding: 3px 11px; border-radius: 99px; margin-bottom: 8px; }
+  .badge-a { background: #9fe1cb; color: #074d35; }
+  .badge-b { background: #b5d4f4; color: #0c3d72; }
+  .badge-c { background: #fac775; color: #6b3e06; }
+
+  .scenario-title { font-size: 15px; font-weight: 700; color: #111; margin-bottom: 4px; }
+  .scenario-desc { font-size: 13px; color: #666; margin-bottom: 16px; line-height: 1.5; }
+
+  .breakdown { border: 1.5px solid #e8e8e8; border-radius: 12px; overflow: hidden; margin-bottom: 14px; }
+  .brow { display: flex; align-items: center; justify-content: space-between; padding: 11px 16px; border-bottom: 1px solid #ebebeb; }
+  .brow:last-child { border-bottom: none; }
+  .brow-label { display: flex; align-items: center; gap: 9px; font-size: 13.5px; color: #555; }
+  .dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+  .brow-val { font-size: 13.5px; font-weight: 600; color: #111; }
+  .brow-val.muted { color: #aaa; font-weight: 400; font-style: italic; }
+  .brow-val.red { color: #c0392b; }
+  .brow.total { background: #f5f5f3; }
+  .brow.total .brow-label { font-weight: 700; color: #111; }
+  .brow.highlight-c { background: #fff8ec; }
+
+  .results { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+  .res-card { border-radius: 12px; padding: 14px 18px; }
+  .res-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 6px; }
+  .res-val { font-size: 30px; font-weight: 700; }
+  .res-a-price { background: #edf9f4; } .res-a-price .res-label { color: #0f6e56; } .res-a-price .res-val { color: #085041; }
+  .res-a-profit { background: #f5f5f3; } .res-a-profit .res-label { color: #777; } .res-a-profit .res-val { color: #111; }
+  .res-b-price { background: #e8f1fb; } .res-b-price .res-label { color: #1a5faa; } .res-b-price .res-val { color: #0c447c; }
+  .res-b-profit { background: #f5f5f3; } .res-b-profit .res-label { color: #777; } .res-b-profit .res-val { color: #111; }
+  .res-c-price { background: #fef3dc; } .res-c-price .res-label { color: #a06510; } .res-c-price .res-val { color: #6b3e06; }
+  .res-c-profit { background: #f5f5f3; } .res-c-profit .res-label { color: #777; } .res-c-profit .res-val { color: #111; }
+
+  .formula { font-size: 13px; color: #888; text-align: center; padding: 9px 14px; background: #f9f9f7; border-radius: 8px; font-family: 'Courier New', Courier, monospace; }
+  .formula strong { color: #333; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="header">
+    <p class="brand">🌿 Gourmet Garden — Pricing Guide</p>
+    <h1 class="main-title">How to price for a 25% profit margin</h1>
+    <p class="main-sub">Three scenarios depending on your plan and order size</p>
+  </div>
+
+  <!-- Always-the-same costs -->
+  <div class="fixed-costs">
+    <div class="fc-card">
+      <div class="fc-label">COGS</div>
+      <div class="fc-val">$6.50</div>
+    </div>
+    <div class="fc-card">
+      <div class="fc-label">Box + Labor</div>
+      <div class="fc-val">$2.50</div>
+    </div>
+    <div class="fc-card">
+      <div class="fc-label">Fixed Total</div>
+      <div class="fc-val">$9.00</div>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <button class="tab act-a" id="tab-a" onclick="show('a')">Scenario A<br><span style="font-weight:400;font-size:11px;">Basic Plan</span></button>
+    <button class="tab" id="tab-b" onclick="show('b')">Scenario B<br><span style="font-weight:400;font-size:11px;">Connect · Under $80</span></button>
+    <button class="tab" id="tab-c" onclick="show('c')">Scenario C<br><span style="font-weight:400;font-size:11px;">Connect · $80+</span></button>
+  </div>
+
+  <!-- Panel A -->
+  <div class="panel visible" id="panel-a">
+    <span class="badge badge-a">Basic Plan — any order size</span>
+    <p class="scenario-title">Bubble Goods covers all shipping labels</p>
+    <p class="scenario-desc">Your costs are exactly the same on every order. The most simple and predictable setup.</p>
+    <div class="breakdown">
+      <div class="divider-label">Your costs</div>
+      <div class="brow"><div class="brow-label"><span class="dot" style="background:#1d9e75;"></span>COGS (ingredients, packaging)</div><div class="brow-val">$6.50</div></div>
+      <div class="brow"><div class="brow-label"><span class="dot" style="background:#9fe1cb;"></span>Fulfillment (box + labor)</div><div class="brow-val">$2.50</div></div>
+      <div class="brow"><div class="brow-label"><span class="dot" style="background:#ddd;"></span>Shipping label</div><div class="brow-val muted">Paid by Bubble Goods</div></div>
+      <div class="brow total"><div class="brow-label"><span class="dot" style="background:#bbb;"></span>Total costs to cover</div><div class="brow-val">$9.00</div></div>
+      <div class="divider-label">Pricing formula</div>
+      <div class="brow"><div class="brow-label"><span class="dot" style="background:#bbb;"></span>Bubble Goods plan share</div><div class="brow-val">65%</div></div>
+      <div class="brow"><div class="brow-label"><span class="dot" style="background:#bbb;"></span>Target profit margin</div><div class="brow-val">25%</div></div>
+      <div class="brow total"><div class="brow-label"><span class="dot" style="background:#bbb;"></span>Net share to price against</div><div class="brow-val">40%&nbsp;&nbsp;<span style="font-size:12px;font-weight:400;color:#888;">(0.65 − 0.25)</span></div></div>
+    </div>
+    <div class="results">
+      <div class="res-card res-a-price"><div class="res-label">List price</div><div class="res-val">$22.50</div></div>
+      <div class="res-card res-a-profit"><div class="res-label">Profit per order</div><div class="res-val">$5.63</div></div>
+    </div>
+    <div class="formula"><strong>$9.00 ÷ 0.40 = $22.50</strong></div>
+  </div>
+
+  <!-- Panel B -->
+  <div class="panel" id="panel-b">
+    <span class="badge badge-b">Connect Plan — orders under $80</span>
+    <p class="scenario-title">The customer pays for shipping</p>
+    <p class="scenario-desc">Because the customer covers shipping, your label cost is $0. The higher plan share means a lower list price and a solid margin.</p>
+    <div class="breakdown">
+      <div class="divider-label">Your costs</div>
+      <div class="brow"><div class="brow-label"><span class="dot" style="background:#2c7be5;"></span>COGS (ingredients, packaging)</div><div class="brow-val">$6.50</div></div>
+      <div class="brow"><div class="brow-label"><span class="dot" style="background:#b5d4f4;"></span>Fulfillment (box + labor)</div><div class="brow-val">$2.50</div></div>
+      <div class="brow"><div class="brow-label"><span class="dot" style="background:#ddd;"></span>Shipping label</div><div class="brow-val muted">Paid by customer — $0</div></div>
+      <div class="brow total"><div class="brow-label"><span class="dot" style="background:#bbb;"></span>Total costs to cover</div><div class="brow-val">$9.00</div></div>
+      <div class="divider-label">Pricing formula</div>
+      <div class="brow"><div class="brow-label"><span class="dot" style="background:#bbb;"></span>Bubble Goods plan share</div><div class="brow-val">75%</div></div>
+      <div class="brow"><div class="brow-label"><span class="dot" style="background:#bbb;"></span>Target profit margin</div><div class="brow-val">25%</div></div>
+      <div class="brow total"><div class="brow-label"><span class="dot" style="background:#bbb;"></span>Net share to price against</div><div class="brow-val">50%&nbsp;&nbsp;<span style="font-size:12px;font-weight:400;color:#888;">(0.75 − 0.25)</span></div></div>
+    </div>
+    <div class="results">
+      <div class="res-card res-b-price"><div class="res-label">List price</div><div class="res-val">$18.00</div></div>
+      <div class="res-card res-b-profit"><div class="res-label">Profit per order</div><div class="res-val">$4.50</div></div>
+    </div>
+    <div class="formula"><strong>$9.00 ÷ 0.50 = $18.00</strong></div>
+  </div>
+
+  <!-- Panel C -->
+  <div class="panel" id="panel-c">
+    <span class="badge badge-c">Connect Plan — orders $80 or more</span>
+    <p class="scenario-title">Free shipping kicks in — you absorb the label cost</p>
+    <p class="scenario-desc">Orders over $80 get free shipping, but that $10.50 label is now your expense. You need to price higher to protect your 25% margin.</p>
+    <div class="breakdown">
+      <div class="divider-label">Your costs</div>
+      <div class="brow"><div class="brow-label"><span class="dot" style="background:#e8a020;"></span>COGS (ingredients, packaging)</div><div class="brow-val">$6.50</div></div>
+      <div class="brow"><div class="brow-label"><span class="dot" style="background:#fac775;"></span>Fulfillment (box + labor)</div><div class="brow-val">$2.50</div></div>
+      <div class="brow highlight-c"><div class="brow-label"><span class="dot" style="background:#e8a020;"></span><strong style="color:#7a4e08;">Shipping label (you pay this!)</strong></div><div class="brow-val red">+ $10.50</div></div>
+      <div class="brow total"><div class="brow-label"><span class="dot" style="background:#bbb;"></span>Total costs to cover</div><div class="brow-val">$19.50</div></div>
+      <div class="divider-label">Pricing formula</div>
+      <div class="brow"><div class="brow-label"><span class="dot" style="background:#bbb;"></span>Bubble Goods plan share</div><div class="brow-val">75%</div></div>
+      <div class="brow"><div class="brow-label"><span class="dot" style="background:#bbb;"></span>Target profit margin</div><div class="brow-val">25%</div></div>
+      <div class="brow total"><div class="brow-label"><span class="dot" style="background:#bbb;"></span>Net share to price against</div><div class="brow-val">50%&nbsp;&nbsp;<span style="font-size:12px;font-weight:400;color:#888;">(0.75 − 0.25)</span></div></div>
+    </div>
+    <div class="results">
+      <div class="res-card res-c-price"><div class="res-label">List price</div><div class="res-val">$39.00</div></div>
+      <div class="res-card res-c-profit"><div class="res-label">Profit per order</div><div class="res-val">$9.75</div></div>
+    </div>
+    <div class="formula"><strong>$19.50 ÷ 0.50 = $39.00</strong></div>
+  </div>
+
+</div>
+<script>
+function show(id) {
+  ['a','b','c'].forEach(function(t) {
+    document.getElementById('panel-' + t).classList.remove('visible');
+    var tab = document.getElementById('tab-' + t);
+    tab.classList.remove('act-a','act-b','act-c');
+  });
+  document.getElementById('panel-' + id).classList.add('visible');
+  document.getElementById('tab-' + id).classList.add('act-' + id);
+}
+</script>
+</body>
+</html>
