@@ -1,79 +1,91 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Bubble Goods MSRP Calculator</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
+
   body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
-    background: rgba(255,255,230,1);
+    background: #FFFFE6;
     color: #1a1a1a;
     padding: 32px 20px 48px;
   }
   .wrap { max-width: 580px; margin: 0 auto; }
 
+  /* ── Header ── */
   .header { text-align: center; margin-bottom: 28px; }
   .eyebrow { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #0f6e56; background: #d4f2e7; border-radius: 99px; padding: 4px 14px; margin-bottom: 12px; }
   .main-title { font-size: 22px; font-weight: 700; color: #111; margin-bottom: 6px; }
   .main-sub { font-size: 13px; color: #777; line-height: 1.5; }
 
+  /* ── Step list ── */
   .step-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
-  .step-card { background: rgba(255,255,230,1); border: 1px solid rgba(0,0,0,0.1); border-radius: 12px; padding: 14px 16px; display: flex; align-items: flex-start; gap: 14px; }
+  .step-card { background: #FFFFE6; border: 1px solid rgba(0,0,0,0.1); border-radius: 12px; padding: 14px 16px; display: flex; align-items: flex-start; gap: 14px; }
   .step-card.dimmed { opacity: 0.72; }
-  .snum { width: 26px; height: 26px; border-radius: 50%; background: rgba(255,255,200,1); border: 1px solid rgba(0,0,0,0.1); font-size: 12px; font-weight: 700; color: #888; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+  .snum { width: 26px; height: 26px; border-radius: 50%; background: #FFFFC8; border: 1px solid rgba(0,0,0,0.1); font-size: 12px; font-weight: 700; color: #888; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
   .snum.green { background: #d4f2e7; color: #0f6e56; border-color: #9fe1cb; }
-  .sbody { flex: 1; min-width: 0; }
+  .sbody { flex: 1; min-width: 0; } /* min-width: 0 prevents flex item from overflowing parent */
   .slabel { font-size: 14px; font-weight: 700; color: #111; margin-bottom: 2px; }
   .sdesc { font-size: 12px; color: #888; margin-bottom: 10px; line-height: 1.45; }
-  .sdesc.no-margin { margin-bottom: 0; }
 
-  /* Plan picker inside step 1 */
+  /* ── Plan picker ── */
   .plan-picker { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-  .plan-btn { padding: 11px 8px; border: 1.5px solid rgba(0,0,0,0.12); border-radius: 10px; background: rgba(255,255,210,1); cursor: pointer; text-align: center; transition: all 0.15s; }
+  .plan-btn { padding: 11px 8px; border: 1.5px solid rgba(0,0,0,0.12); border-radius: 10px; background: #FFFFD2; cursor: pointer; text-align: center; transition: all 0.15s; font: inherit; }
   .plan-btn:hover { border-color: rgba(0,0,0,0.25); }
-  .plan-btn.active { border-color: #1d9e75; background: #d4f2e7; }
+  .plan-btn:focus-visible { outline: 2px solid #1d9e75; outline-offset: 2px; }
+  .plan-btn[aria-pressed="true"] { border-color: #1d9e75; background: #d4f2e7; }
   .plan-btn .pname { font-size: 13px; font-weight: 700; color: #333; display: block; margin-bottom: 1px; }
   .plan-btn .pshare { font-size: 11px; color: #999; display: block; }
-  .plan-btn.active .pname { color: #085041; }
-  .plan-btn.active .pshare { color: #1d9e75; }
+  .plan-btn[aria-pressed="true"] .pname { color: #085041; }
+  .plan-btn[aria-pressed="true"] .pshare { color: #1d9e75; }
 
+  /* ── Inputs ── */
   .input-wrap { position: relative; }
   .ipfx { position: absolute; left: 9px; top: 50%; transform: translateY(-50%); font-size: 14px; font-weight: 600; color: #aaa; pointer-events: none; }
-  .step-input { width: 100%; padding: 9px 12px 9px 24px; border: 1.5px solid rgba(0,0,0,0.12); border-radius: 8px; font-size: 15px; font-weight: 600; color: #111; background: rgba(255,255,215,1); outline: none; transition: border-color 0.15s; -moz-appearance: textfield; }
+  .step-input { width: 100%; padding: 9px 12px 9px 24px; border: 1.5px solid rgba(0,0,0,0.12); border-radius: 8px; font-size: 15px; font-weight: 600; color: #111; background: #FFFFD7; outline: none; transition: border-color 0.15s; -moz-appearance: textfield; }
   .step-input.no-prefix { padding-left: 12px; }
-  .step-input::-webkit-outer-spin-button, .step-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+  .step-input::-webkit-outer-spin-button,
+  .step-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
   .step-input:focus { border-color: #1d9e75; background: rgba(255,255,255,0.9); }
+  .step-input:focus-visible { outline: 2px solid #1d9e75; outline-offset: 1px; }
   .step-input.has-error { border-color: #c0392b; background: #fff8f8; }
+  .step-input.disabled-look { opacity: 0.5; cursor: not-allowed; }
 
   .field-error { display: none; font-size: 11px; color: #c0392b; margin-top: 5px; font-weight: 600; }
   .field-error.visible { display: block; }
   .field-warn { display: none; font-size: 11px; color: #996600; margin-top: 5px; font-weight: 600; }
   .field-warn.visible { display: block; }
 
-  .auto-val { font-size: 15px; font-weight: 700; color: #333; background: rgba(255,255,200,1); border: 1px solid rgba(0,0,0,0.08); border-radius: 8px; padding: 9px 12px; }
+  .auto-val { font-size: 15px; font-weight: 700; color: #333; background: #FFFFC8; border: 1px solid rgba(0,0,0,0.08); border-radius: 8px; padding: 9px 12px; }
 
+  /* ── Sliders ── */
   .slider-row { display: flex; align-items: center; gap: 12px; margin-top: 4px; }
   .slider-track { flex: 1; -webkit-appearance: none; appearance: none; height: 4px; border-radius: 2px; background: rgba(0,0,0,0.12); outline: none; cursor: pointer; }
   .slider-track::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; border-radius: 50%; background: #1d9e75; border: 2px solid rgba(255,255,255,0.9); cursor: pointer; }
   .slider-track::-moz-range-thumb { width: 18px; height: 18px; border-radius: 50%; background: #1d9e75; border: 2px solid rgba(255,255,255,0.9); cursor: pointer; }
+  .slider-track:focus-visible { outline: 2px solid #1d9e75; outline-offset: 4px; border-radius: 4px; }
   .slider-track.discount-track::-webkit-slider-thumb { background: #c98a16; }
   .slider-track.discount-track::-moz-range-thumb { background: #c98a16; }
   .slider-val { font-size: 15px; font-weight: 700; color: #111; min-width: 44px; text-align: right; }
   .slider-hint { font-size: 11px; color: #aaa; margin-top: 5px; }
 
+  /* ── Bundle stepper ── */
   .bundle-row { display: flex; align-items: center; gap: 10px; }
-  .bundle-btn { width: 28px; height: 28px; border: 1.5px solid rgba(0,0,0,0.12); border-radius: 8px; background: rgba(255,255,210,1); font-size: 16px; font-weight: 700; color: #555; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .bundle-btn { width: 28px; height: 28px; border: 1.5px solid rgba(0,0,0,0.12); border-radius: 8px; background: #FFFFD2; font-size: 16px; font-weight: 700; color: #555; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-family: inherit; }
   .bundle-btn:hover { border-color: #1d9e75; color: #1d9e75; }
-  .bundle-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .bundle-btn:focus-visible { outline: 2px solid #1d9e75; outline-offset: 2px; }
   .bundle-input { width: 60px; text-align: center; padding: 8px 0; }
   .bundle-hint { font-size: 12px; color: #999; }
 
+  /* ── Divider ── */
   .divider { display: flex; align-items: center; gap: 10px; margin: 20px 0 16px; }
   .divider-line { flex: 1; height: 1px; background: rgba(0,0,0,0.1); }
   .divider-text { font-size: 11px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: #bbb; }
 
+  /* ── Result card ── */
   .result-card { border: 2px solid #1d9e75; border-radius: 16px; overflow: hidden; margin-bottom: 14px; }
   .result-header { background: #d4f2e7; padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 6px; }
   .result-label-text { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #0f6e56; }
@@ -81,13 +93,13 @@
   .result-badge { font-size: 11px; font-weight: 700; background: #1d9e75; color: rgba(255,255,255,0.95); border-radius: 99px; padding: 3px 10px; }
   .result-badge.bundle { background: #2c7be5; }
   .result-badge.sale { background: #c98a16; }
-  .result-body { padding: 20px; text-align: center; background: rgba(255,255,230,1); }
+  .result-body { padding: 20px; text-align: center; background: #FFFFE6; }
   .result-price { font-size: 48px; font-weight: 800; color: #085041; line-height: 1; margin-bottom: 6px; transition: color 0.15s; }
   .result-price.muted { color: #aaa; font-size: 32px; }
   .result-price.error-color { color: #c0392b; font-size: 22px; }
   .result-hint { font-size: 13px; color: #888; line-height: 1.5; }
 
-  /* Sale preview */
+  /* ── Sale preview ── */
   .sale-preview { display: none; margin-top: 14px; padding-top: 14px; border-top: 1px dashed rgba(0,0,0,0.15); }
   .sale-preview.visible { display: block; }
   .sale-row { display: flex; justify-content: space-between; align-items: center; padding: 4px 0; font-size: 13px; color: #666; }
@@ -96,42 +108,57 @@
   .sale-row.profit-pos span:last-child { color: #0f6e56; }
   .sale-row.profit-neg span:last-child { color: #c0392b; }
 
-  .summary-box { background: rgba(255,255,210,1); border: 1px solid rgba(0,0,0,0.08); border-radius: 12px; padding: 14px 16px; margin-bottom: 12px; display: none; }
+  /* ── Summary box ── */
+  .summary-box { background: #FFFFD2; border: 1px solid rgba(0,0,0,0.08); border-radius: 12px; padding: 14px 16px; margin-bottom: 12px; display: none; }
   .srow { display: flex; justify-content: space-between; font-size: 13px; padding: 3px 0; color: #666; }
   .srow span:last-child { font-weight: 600; color: #333; }
   .srow.stotal { font-weight: 700; color: #111; border-top: 1px solid rgba(0,0,0,0.08); margin-top: 6px; padding-top: 8px; }
   .srow.stotal span:last-child { color: #111; }
   .srow.ssep { margin-top: 8px; }
 
+  /* ── Alerts ── */
   .alert { display: none; border-radius: 10px; padding: 11px 14px; font-size: 12px; line-height: 1.55; margin-bottom: 10px; }
   .alert.visible { display: block; }
   .alert-warn { background: #fff8ec; border: 1px solid #f0c060; color: #7a5000; }
   .alert-warn strong { color: #5a3800; }
   .alert-error { background: #fff0f0; border: 1px solid #f5a0a0; color: #8b1a1a; }
   .alert-error strong { color: #6b0000; }
+
+  /* ── Smart shipping warning ── */
+  .smart-warning { display: none; background: #fff8ec; border: 1.5px solid #f0c060; border-radius: 12px; padding: 14px 16px; margin-bottom: 12px; font-size: 13px; color: #5a3800; line-height: 1.55; }
+  .smart-warning.visible { display: block; }
+  .smart-warning .sw-title { display: flex; align-items: center; gap: 6px; font-weight: 700; color: #5a3800; margin-bottom: 4px; font-size: 13px; }
+  .smart-warning .sw-icon { font-size: 14px; }
+  .smart-warning strong { color: #3a2400; }
+  .smart-warning .sw-suggest { margin-top: 6px; padding-top: 6px; border-top: 1px dashed rgba(122,80,0,0.3); font-size: 12px; color: #7a5000; }
+
+  /* Screen reader only */
+  .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
 </style>
 </head>
 <body>
 <div class="wrap">
-  <div class="header">
+
+  <header class="header">
     <div class="eyebrow">🌿 Bubble Goods</div>
     <h1 class="main-title">MSRP Pricing Calculator</h1>
     <p class="main-sub">Enter your costs below and we'll recommend a listing price<br>that hits your profit goal — even on sale.</p>
-  </div>
+  </header>
 
   <div class="step-list">
 
+    <!-- Step 1: Plan selection -->
     <div class="step-card">
-      <div class="snum green">1</div>
+      <div class="snum green" aria-hidden="true">1</div>
       <div class="sbody">
-        <div class="slabel">Choose your plan</div>
-        <div class="sdesc">Your plan determines how much of the sale you keep. The Basic Plan covers all shipping costs; the Connect Plan gives a higher share but you handle shipping over $80.</div>
-        <div class="plan-picker">
-          <button type="button" class="plan-btn active" id="btn-connect" onclick="setPlan('connect')">
+        <div class="slabel" id="step-1-label">Choose your plan</div>
+        <div class="sdesc" id="step-1-desc">Your plan determines how much of the sale you keep. The Basic Plan covers all shipping costs; the Connect Plan gives a higher share but you handle shipping over $80.</div>
+        <div class="plan-picker" role="group" aria-labelledby="step-1-label">
+          <button type="button" class="plan-btn" id="btn-connect" aria-pressed="true" data-plan="connect">
             <span class="pname">Connect Plan</span>
             <span class="pshare">Keep 75% of sale</span>
           </button>
-          <button type="button" class="plan-btn" id="btn-basic" onclick="setPlan('basic')">
+          <button type="button" class="plan-btn" id="btn-basic" aria-pressed="false" data-plan="basic">
             <span class="pname">Basic Plan</span>
             <span class="pshare">Keep 65% of sale</span>
           </button>
@@ -139,133 +166,133 @@
       </div>
     </div>
 
+    <!-- Step 2: Production cost -->
     <div class="step-card">
-      <div class="snum green">2</div>
+      <div class="snum green" aria-hidden="true">2</div>
       <div class="sbody">
-        <div class="slabel">Production cost (per unit)</div>
-        <div class="sdesc">The direct cost to make a single unit. Includes raw ingredients, the jar/packaging, and the labor required to produce that specific item.</div>
+        <label class="slabel" for="cogs">Production cost (per unit)</label>
+        <div class="sdesc" id="cogs-desc">The direct cost to make a single unit. Includes raw ingredients, the jar/packaging, and the labor required to produce that specific item.</div>
         <div class="input-wrap">
-          <span class="ipfx">$</span>
-          <input class="step-input" type="number" id="cogs" min="0" step="0.01" placeholder="0.00" oninput="onInput(this,'cogs-err','cogs-warn')" onblur="onBlur(this,'cogs-err','cogs-warn')" autocomplete="off" />
+          <span class="ipfx" aria-hidden="true">$</span>
+          <input class="step-input" type="number" id="cogs" min="0" step="0.01" placeholder="0.00" inputmode="decimal" autocomplete="off" aria-describedby="cogs-desc cogs-err cogs-warn">
         </div>
-        <div class="field-error" id="cogs-err"></div>
-        <div class="field-warn" id="cogs-warn"></div>
+        <div class="field-error" id="cogs-err" role="alert"></div>
+        <div class="field-warn" id="cogs-warn" aria-live="polite"></div>
       </div>
     </div>
 
+    <!-- Step 3: Bundle size -->
     <div class="step-card">
-      <div class="snum green">3</div>
+      <div class="snum green" aria-hidden="true">3</div>
       <div class="sbody">
-        <div class="slabel">Bundle size</div>
-        <div class="sdesc">How many units are in this listing? Enter 1 for a single item, or higher for a multi-pack. Your total production cost is multiplied by this number.</div>
+        <label class="slabel" for="bundle">Bundle size</label>
+        <div class="sdesc" id="bundle-desc">How many units are in this listing? Enter 1 for a single item, or higher for a multi-pack. Your total production cost is multiplied by this number.</div>
         <div class="bundle-row">
-          <button type="button" class="bundle-btn" onclick="bumpBundle(-1)">−</button>
-          <input class="step-input bundle-input no-prefix" type="number" id="bundle" min="1" max="50" step="1" value="1" oninput="onBundleInput()" onblur="onBundleBlur()" autocomplete="off" />
-          <button type="button" class="bundle-btn" onclick="bumpBundle(1)">+</button>
-          <span class="bundle-hint" id="bundle-hint">Single item</span>
+          <button type="button" class="bundle-btn" id="bundle-minus" aria-label="Decrease bundle size">−</button>
+          <input class="step-input bundle-input no-prefix" type="number" id="bundle" min="1" max="50" step="1" value="1" inputmode="numeric" autocomplete="off" aria-describedby="bundle-desc bundle-warn">
+          <button type="button" class="bundle-btn" id="bundle-plus" aria-label="Increase bundle size">+</button>
+          <span class="bundle-hint" id="bundle-hint" aria-live="polite">Single item</span>
         </div>
-        <div class="field-warn" id="bundle-warn"></div>
+        <div class="field-warn" id="bundle-warn" aria-live="polite"></div>
       </div>
     </div>
 
+    <!-- Step 4: Fulfillment -->
     <div class="step-card">
-      <div class="snum green">4</div>
+      <div class="snum green" aria-hidden="true">4</div>
       <div class="sbody">
-        <div class="slabel">Box and packing labor</div>
-        <div class="sdesc">The cost to fulfill one order. Includes the shipping box, tape, protective materials, and the labor to pick and pack.</div>
+        <label class="slabel" for="fulfillment">Box and packing labor</label>
+        <div class="sdesc" id="ful-desc">The cost to fulfill one order. Includes the shipping box, tape, protective materials, and the labor to pick and pack.</div>
         <div class="input-wrap">
-          <span class="ipfx">$</span>
-          <input class="step-input" type="number" id="fulfillment" min="0" step="0.01" placeholder="0.00" oninput="onInput(this,'ful-err','ful-warn')" onblur="onBlur(this,'ful-err','ful-warn')" autocomplete="off" />
+          <span class="ipfx" aria-hidden="true">$</span>
+          <input class="step-input" type="number" id="fulfillment" min="0" step="0.01" placeholder="0.00" inputmode="decimal" autocomplete="off" aria-describedby="ful-desc ful-err ful-warn">
         </div>
-        <div class="field-error" id="ful-err"></div>
-        <div class="field-warn" id="ful-warn"></div>
+        <div class="field-error" id="ful-err" role="alert"></div>
+        <div class="field-warn" id="ful-warn" aria-live="polite"></div>
       </div>
     </div>
 
-    <div class="step-card" id="shipping-card">
-      <div class="snum green">5</div>
+    <!-- Step 5: Shipping -->
+    <div class="step-card">
+      <div class="snum green" aria-hidden="true">5</div>
       <div class="sbody">
-        <div class="slabel">Shipping label cost</div>
-        <div class="sdesc" id="ship-desc">On the Connect Plan, enter $0 for orders under $80 (customer pays). For orders over $80, enter your actual label cost — typically around $10.50 — since free shipping kicks in and you absorb it.</div>
+        <label class="slabel" for="shipping">Shipping label cost</label>
+        <div class="sdesc" id="ship-desc">On the Connect Plan, enter your actual shipping label cost (typically around $10.50). This is the cost you absorb when a customer's order crosses $80 and qualifies for free shipping.</div>
         <div class="input-wrap">
-          <span class="ipfx">$</span>
-          <input class="step-input" type="number" id="shipping" min="0" step="0.01" placeholder="0.00" oninput="onInput(this,'ship-err','ship-warn')" onblur="onBlur(this,'ship-err','ship-warn')" autocomplete="off" />
+          <span class="ipfx" aria-hidden="true">$</span>
+          <input class="step-input" type="number" id="shipping" min="0" step="0.01" placeholder="0.00" inputmode="decimal" autocomplete="off" aria-describedby="ship-desc ship-err ship-warn">
         </div>
-        <div class="field-error" id="ship-err"></div>
-        <div class="field-warn" id="ship-warn"></div>
+        <div class="field-error" id="ship-err" role="alert"></div>
+        <div class="field-warn" id="ship-warn" aria-live="polite"></div>
       </div>
     </div>
 
+    <!-- Step 6: Total costs (auto) -->
     <div class="step-card dimmed">
-      <div class="snum">6</div>
+      <div class="snum" aria-hidden="true">6</div>
       <div class="sbody">
         <div class="slabel">Total costs</div>
         <div class="sdesc">Auto-calculated. Production cost (× bundle size) + packing labor + shipping label.</div>
-        <div class="auto-val" id="total-display">$0.00</div>
+        <div class="auto-val" id="total-display" aria-live="polite">$0.00</div>
       </div>
     </div>
 
+    <!-- Step 7: Margin slider -->
     <div class="step-card">
-      <div class="snum green">7</div>
+      <div class="snum green" aria-hidden="true">7</div>
       <div class="sbody">
-        <div class="slabel">Your profit margin goal</div>
-        <div class="sdesc">The net profit percentage you want to keep from every full-price sale. We suggest 20% to 35% for a healthy business.</div>
+        <label class="slabel" for="margin">Your profit margin goal</label>
+        <div class="sdesc" id="margin-desc">The net profit percentage you want to keep from every full-price sale. We suggest 20% to 35% for a healthy business.</div>
         <div class="slider-row">
-          <input class="slider-track" type="range" id="margin" min="5" max="60" value="25" step="1" oninput="onMargin()" />
-          <span class="slider-val" id="margin-display">25%</span>
+          <input class="slider-track" type="range" id="margin" min="5" max="60" value="25" step="1" aria-describedby="margin-desc margin-warn" aria-valuemin="5" aria-valuemax="60" aria-valuenow="25">
+          <span class="slider-val" id="margin-display" aria-live="polite">25%</span>
         </div>
         <div class="slider-hint">Drag to adjust &nbsp;·&nbsp; Suggested: 20% to 35%</div>
-        <div class="field-warn" id="margin-warn" style="margin-top:6px;"></div>
+        <div class="field-warn" id="margin-warn" style="margin-top:6px;" aria-live="polite"></div>
       </div>
     </div>
 
+    <!-- Step 8: Discount slider -->
     <div class="step-card">
-      <div class="snum green">8</div>
+      <div class="snum green" aria-hidden="true">8</div>
       <div class="sbody">
-        <div class="slabel">Future sale or discount (optional)</div>
-        <div class="sdesc">Planning to put this product on sale? Drag to factor in a discount. The calculator will recommend a higher MSRP so your margin survives the discount.</div>
+        <label class="slabel" for="discount">Future sale or discount (optional)</label>
+        <div class="sdesc" id="discount-desc">Planning to put this product on sale? Drag to factor in a discount. The calculator will recommend a higher MSRP so your margin survives the discount.</div>
         <div class="slider-row">
-          <input class="slider-track discount-track" type="range" id="discount" min="0" max="60" value="0" step="1" oninput="onDiscount()" />
-          <span class="slider-val" id="discount-display">0%</span>
+          <input class="slider-track discount-track" type="range" id="discount" min="0" max="60" value="0" step="1" aria-describedby="discount-desc discount-warn" aria-valuemin="0" aria-valuemax="60" aria-valuenow="0">
+          <span class="slider-val" id="discount-display" aria-live="polite">0%</span>
         </div>
         <div class="slider-hint">Leave at 0% if not running a sale</div>
-        <div class="field-warn" id="discount-warn" style="margin-top:6px;"></div>
+        <div class="field-warn" id="discount-warn" style="margin-top:6px;" aria-live="polite"></div>
       </div>
     </div>
 
   </div>
 
-  <div class="alert alert-warn" id="alert-free-shipping">
-    <strong>Heads up — free shipping threshold:</strong> Your recommended price is over $80. On the Connect Plan, orders over $80 qualify for free shipping, which means you absorb the shipping label cost. Make sure you have entered your label cost in Step 5 to protect your margin.
-  </div>
-
-  <div class="alert alert-warn" id="alert-basic-shipping">
-    <strong>Note:</strong> On the Basic Plan, Bubble Goods covers all shipping label costs. Step 5 should be $0.00 for your plan.
-  </div>
-
-  <div class="alert alert-error" id="alert-denom-error">
+  <!-- Alerts -->
+  <div class="alert alert-error" id="alert-denom-error" role="alert">
     <strong>Margin too high:</strong> Your profit goal cannot equal or exceed your plan share percentage. Either lower your margin goal or switch to a higher-share plan.
   </div>
-
-  <div class="alert alert-warn" id="alert-denom-small">
+  <div class="alert alert-warn" id="alert-denom-small" role="alert">
     <strong>Heads up — extreme result:</strong> Your margin goal is very close to your plan share, which produces an unusually high price. Consider lowering your margin slightly for a realistic listing price.
   </div>
 
-  <div class="divider">
+  <div class="divider" role="presentation">
     <div class="divider-line"></div>
     <div class="divider-text">Your result</div>
     <div class="divider-line"></div>
   </div>
 
-  <div class="result-card">
+  <!-- Result -->
+  <section class="result-card" aria-labelledby="result-label">
     <div class="result-header">
-      <span class="result-label-text">Recommended listing price (MSRP)</span>
+      <span class="result-label-text" id="result-label">Recommended listing price (MSRP)</span>
       <span class="result-badges" id="result-badges">
-        <span class="result-badge" id="plan-badge">Connect · 75%</span>
+        <span class="result-badge">Connect · 75%</span>
       </span>
     </div>
     <div class="result-body">
-      <div class="result-price muted" id="msrp-output">—</div>
+      <div class="result-price muted" id="msrp-output" aria-live="polite">—</div>
       <div class="result-hint" id="msrp-hint">Fill in your costs above to see your recommendation</div>
 
       <div class="sale-preview" id="sale-preview">
@@ -287,11 +314,12 @@
         </div>
       </div>
     </div>
-  </div>
+  </section>
 
+  <!-- Summary -->
   <div class="summary-box" id="summary-box">
     <div class="srow"><span>Production cost (per unit)</span><span id="s-cogs">$0.00</span></div>
-    <div class="srow"><span id="s-bundle-lbl">Bundle size</span><span id="s-bundle">1</span></div>
+    <div class="srow"><span>Bundle size</span><span id="s-bundle">1</span></div>
     <div class="srow"><span>Total production cost</span><span id="s-prod-total">$0.00</span></div>
     <div class="srow"><span>Box and packing</span><span id="s-ful">$0.00</span></div>
     <div class="srow"><span>Shipping label</span><span id="s-ship">$0.00</span></div>
@@ -302,282 +330,476 @@
     <div class="srow stotal"><span>Effective net share</span><span id="s-net">0.50</span></div>
   </div>
 
+  <!-- Smart shipping warning -->
+  <div class="smart-warning" id="smart-warning" role="alert" aria-live="polite">
+    <div class="sw-title"><span class="sw-icon" aria-hidden="true">⚠</span><span id="sw-title-text">Heads up — shipping label cost missing</span></div>
+    <div id="sw-body"></div>
+    <div class="sw-suggest" id="sw-suggest"></div>
+  </div>
+
 </div>
+
 <script>
-var plan = 'connect';
-var PLAN_SHARES = { connect: 0.75, basic: 0.65 };
-var MAX_REASONABLE = 10000;
+'use strict';
 
-function setPlan(p) {
-  plan = p;
-  document.getElementById('btn-connect').classList.toggle('active', p === 'connect');
-  document.getElementById('btn-basic').classList.toggle('active', p === 'basic');
-  var shipDesc = document.getElementById('ship-desc');
-  var shipInput = document.getElementById('shipping');
-  if (p === 'basic') {
-    shipDesc.textContent = 'On the Basic Plan, Bubble Goods covers all shipping label costs. Enter $0.00 here.';
-    shipInput.value = '0.00';
-    shipInput.setAttribute('readonly', true);
-    shipInput.style.opacity = '0.5';
-    shipInput.style.cursor = 'not-allowed';
-  } else {
-    shipDesc.textContent = 'On the Connect Plan, enter $0 for orders under $80 (customer pays). For orders over $80, enter your actual label cost — typically around $10.50 — since free shipping kicks in and you absorb it.';
-    shipInput.removeAttribute('readonly');
-    shipInput.style.opacity = '';
-    shipInput.style.cursor = '';
-  }
-  clearFieldMessages('ship-err', 'ship-warn');
-  calc();
-}
+(function () {
 
-function sanitize(raw) {
-  if (raw === '' || raw === null || raw === undefined) return 0;
-  var n = parseFloat(raw);
-  if (isNaN(n) || !isFinite(n)) return 0;
-  if (n < 0) return 0;
-  return Math.round(n * 100) / 100;
-}
+  // =====================
+  // CONSTANTS
+  // =====================
+  const PLAN_SHARES = Object.freeze({ connect: 0.75, basic: 0.65 });
+  const FREE_SHIPPING_THRESHOLD = 80;
+  const MAX_REASONABLE_MSRP = 10000;
+  const HIGH_INPUT_WARNING = 999.99;
+  const MIN_SAFE_MARGIN = 10;
+  const MAX_SAFE_MARGIN = 45;
+  const HIGH_DISCOUNT_WARNING = 50;
+  const HIGH_BUNDLE_WARNING = 12;
+  const EXTREME_DENOMINATOR = 0.05;
+  const MIN_BUNDLE = 1;
+  const MAX_BUNDLE = 50;
+  const DEFAULT_MARGIN = 25;
+  const TYPICAL_SHIPPING_COST = 10.50;
 
-function sanitizeInt(raw, min, max) {
-  if (raw === '' || raw === null || raw === undefined) return min;
-  var n = parseInt(raw);
-  if (isNaN(n) || !isFinite(n)) return min;
-  if (n < min) return min;
-  if (n > max) return max;
-  return n;
-}
+  // =====================
+  // STATE
+  // =====================
+  let plan = 'connect';
+  const dom = {}; // DOM cache, populated by cacheElements()
 
-function fmtMoney(n) {
-  if (!isFinite(n) || isNaN(n)) return '—';
-  var sign = n < 0 ? '-' : '';
-  var abs = Math.abs(n);
-  return sign + '$' + abs.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-}
-
-function clearFieldMessages(errId, warnId) {
-  var e = document.getElementById(errId);
-  var w = document.getElementById(warnId);
-  if (e) { e.textContent = ''; e.classList.remove('visible'); }
-  if (w) { w.textContent = ''; w.classList.remove('visible'); }
-}
-function showFieldError(errId, msg) { var e = document.getElementById(errId); if (e) { e.textContent = msg; e.classList.add('visible'); } }
-function showFieldWarn(warnId, msg) { var w = document.getElementById(warnId); if (w) { w.textContent = msg; w.classList.add('visible'); } }
-function showAlert(id) { var el = document.getElementById(id); if (el) el.classList.add('visible'); }
-function hideAlert(id) { var el = document.getElementById(id); if (el) el.classList.remove('visible'); }
-
-function onInput(input, errId, warnId) {
-  clearFieldMessages(errId, warnId);
-  input.classList.remove('has-error');
-  var raw = input.value;
-  if (raw !== '' && parseFloat(raw) < 0) {
-    input.classList.add('has-error');
-    showFieldError(errId, 'Value cannot be negative. Enter 0 or a positive amount.');
-  }
-  calc();
-}
-
-function onBlur(input, errId, warnId) {
-  clearFieldMessages(errId, warnId);
-  input.classList.remove('has-error');
-  var raw = input.value;
-  if (raw === '' || raw === null) { input.value = ''; calc(); return; }
-  var n = parseFloat(raw);
-  if (isNaN(n) || !isFinite(n)) {
-    input.value = '';
-    showFieldError(errId, 'Please enter a valid number.');
-    input.classList.add('has-error');
-    calc(); return;
-  }
-  if (n < 0) {
-    input.value = '0.00';
-    showFieldWarn(warnId, 'Negative values are not valid here. Reset to $0.00.');
-    calc(); return;
-  }
-  input.value = n.toFixed(2);
-  if (n > 999.99) showFieldWarn(warnId, 'This is a high value — double-check it looks right.');
-  calc();
-}
-
-function bumpBundle(delta) {
-  var input = document.getElementById('bundle');
-  var current = sanitizeInt(input.value, 1, 50);
-  var next = current + delta;
-  if (next < 1) next = 1;
-  if (next > 50) next = 50;
-  input.value = next;
-  onBundleInput();
-}
-
-function onBundleInput() {
-  var input = document.getElementById('bundle');
-  var raw = input.value;
-  clearFieldMessages('bundle-warn', 'bundle-warn');
-  input.classList.remove('has-error');
-  if (raw !== '' && (parseInt(raw) < 1 || isNaN(parseInt(raw)))) {
-    input.classList.add('has-error');
-  }
-  var n = sanitizeInt(raw, 1, 50);
-  var hint = document.getElementById('bundle-hint');
-  if (n === 1) hint.textContent = 'Single item';
-  else hint.textContent = n + '-pack bundle';
-  calc();
-}
-
-function onBundleBlur() {
-  var input = document.getElementById('bundle');
-  var n = sanitizeInt(input.value, 1, 50);
-  input.value = n;
-  input.classList.remove('has-error');
-  clearFieldMessages('bundle-warn', 'bundle-warn');
-  if (n >= 12) showFieldWarn('bundle-warn', 'A large bundle is unusual — double-check this is intentional.');
-  onBundleInput();
-}
-
-function onMargin() {
-  var v = parseInt(document.getElementById('margin').value);
-  document.getElementById('margin-display').textContent = v + '%';
-  clearFieldMessages('margin-warn', 'margin-warn');
-  if (v < 10) showFieldWarn('margin-warn', 'A margin below 10% may not be sustainable. Consider at least 20%.');
-  if (v > 45) showFieldWarn('margin-warn', 'A margin above 45% is unusually high and may make your listing price uncompetitive.');
-  calc();
-}
-
-function onDiscount() {
-  var v = parseInt(document.getElementById('discount').value);
-  document.getElementById('discount-display').textContent = v + '%';
-  clearFieldMessages('discount-warn', 'discount-warn');
-  if (v >= 50) showFieldWarn('discount-warn', 'Discounts of 50% or more require very high markups and may not be sustainable long term.');
-  calc();
-}
-
-function calc() {
-  var share = PLAN_SHARES[plan];
-  var cogs = sanitize(document.getElementById('cogs').value);
-  var bundleSize = sanitizeInt(document.getElementById('bundle').value, 1, 50);
-  var ful = sanitize(document.getElementById('fulfillment').value);
-  var ship = plan === 'basic' ? 0 : sanitize(document.getElementById('shipping').value);
-  var marginPct = parseInt(document.getElementById('margin').value);
-  var margin = marginPct / 100;
-  var discountPct = parseInt(document.getElementById('discount').value);
-  var discount = discountPct / 100;
-
-  var prodTotal = Math.round(cogs * bundleSize * 100) / 100;
-  var total = Math.round((prodTotal + ful + ship) * 100) / 100;
-  var saleFactor = Math.round((1 - discount) * 1000) / 1000;
-  var effectiveDenom = Math.round((share - margin) * saleFactor * 1000) / 1000;
-
-  document.getElementById('total-display').textContent = fmtMoney(total);
-
-  /* Update badges */
-  var badges = '<span class="result-badge">' + (plan === 'connect' ? 'Connect' : 'Basic') + ' · ' + Math.round(share * 100) + '%</span>';
-  if (bundleSize > 1) badges += '<span class="result-badge bundle">' + bundleSize + '-pack</span>';
-  if (discountPct > 0) badges += '<span class="result-badge sale">' + discountPct + '% sale ready</span>';
-  document.getElementById('result-badges').innerHTML = badges;
-
-  /* Update summary numbers */
-  document.getElementById('s-cogs').textContent = fmtMoney(cogs);
-  document.getElementById('s-bundle').textContent = bundleSize === 1 ? '1 (single item)' : bundleSize + '-pack';
-  document.getElementById('s-prod-total').textContent = fmtMoney(prodTotal);
-  document.getElementById('s-ful').textContent = fmtMoney(ful);
-  document.getElementById('s-ship').textContent = fmtMoney(ship);
-  document.getElementById('s-total').textContent = fmtMoney(total);
-  document.getElementById('s-plan-lbl').textContent = 'Plan share (' + Math.round(share * 100) + '%)';
-  document.getElementById('s-plan-val').textContent = share.toFixed(2);
-  document.getElementById('s-margin-lbl').textContent = 'Profit goal (' + marginPct + '%)';
-  document.getElementById('s-margin-val').textContent = margin.toFixed(2);
-
-  var discountRow = document.getElementById('s-discount-row');
-  if (discountPct > 0) {
-    document.getElementById('s-discount-lbl').textContent = 'Sale buffer (' + discountPct + '% off)';
-    document.getElementById('s-discount-val').textContent = '× ' + saleFactor.toFixed(2);
-    discountRow.style.display = 'flex';
-  } else {
-    discountRow.style.display = 'none';
-  }
-  document.getElementById('s-net').textContent = effectiveDenom.toFixed(3);
-
-  /* Reset alerts and preview */
-  hideAlert('alert-free-shipping');
-  hideAlert('alert-basic-shipping');
-  hideAlert('alert-denom-error');
-  hideAlert('alert-denom-small');
-  document.getElementById('sale-preview').classList.remove('visible');
-
-  var outputEl = document.getElementById('msrp-output');
-  var hintEl = document.getElementById('msrp-hint');
-  var summaryEl = document.getElementById('summary-box');
-
-  /* Critical error: denominator <= 0 */
-  if ((share - margin) <= 0 || effectiveDenom <= 0) {
-    outputEl.className = 'result-price error-color';
-    outputEl.textContent = 'Cannot calculate';
-    hintEl.textContent = 'Your margin or discount makes profit impossible at this plan share.';
-    summaryEl.style.display = 'none';
-    showAlert('alert-denom-error');
-    return;
+  // =====================
+  // UTILS
+  // =====================
+  function sanitizeMoney(raw) {
+    if (raw === '' || raw === null || raw === undefined) return 0;
+    const n = parseFloat(raw);
+    if (!Number.isFinite(n) || n < 0) return 0;
+    return Math.round(n * 100) / 100;
   }
 
-  /* No costs entered yet */
-  if (total === 0) {
-    outputEl.className = 'result-price muted';
-    outputEl.textContent = '—';
-    hintEl.textContent = 'Fill in your costs above to see your recommendation';
-    summaryEl.style.display = 'none';
-    return;
+  function sanitizeInt(raw, min, max) {
+    if (raw === '' || raw === null || raw === undefined) return min;
+    const n = parseInt(raw, 10);
+    if (!Number.isFinite(n)) return min;
+    if (n < min) return min;
+    if (n > max) return max;
+    return n;
   }
 
-  /* Calculate sale-proof MSRP */
-  var msrp = total / effectiveDenom;
-  msrp = Math.round(msrp * 100) / 100;
-
-  if (!isFinite(msrp) || isNaN(msrp) || msrp > MAX_REASONABLE) {
-    outputEl.className = 'result-price error-color';
-    outputEl.textContent = 'Check inputs';
-    hintEl.textContent = 'Result is outside a reasonable range — review your values.';
-    summaryEl.style.display = 'none';
-    return;
+  function fmtMoney(n) {
+    if (!Number.isFinite(n)) return '—';
+    const sign = n < 0 ? '-' : '';
+    return sign + '$' + Math.abs(n).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   }
 
-  if (effectiveDenom < 0.05) showAlert('alert-denom-small');
-
-  outputEl.className = 'result-price';
-  outputEl.textContent = fmtMoney(msrp);
-
-  if (discountPct > 0) {
-    hintEl.textContent = 'Recommended for ' + bundleSize + '-pack' + (bundleSize === 1 ? ' (single item)' : '') + ', priced to survive a ' + discountPct + '% sale';
-  } else if (bundleSize > 1) {
-    hintEl.textContent = 'Recommended for ' + bundleSize + '-pack bundle';
-  } else {
-    hintEl.textContent = 'Recommended listing price for this product';
+  function round2(n) {
+    return Math.round(n * 100) / 100;
   }
 
-  summaryEl.style.display = 'block';
-
-  /* Sale preview */
-  if (discountPct > 0) {
-    var salePrice = Math.round(msrp * saleFactor * 100) / 100;
-    var saleRevenue = Math.round(salePrice * share * 100) / 100;
-    var saleProfit = Math.round((saleRevenue - total) * 100) / 100;
-
-    document.getElementById('sale-pct').textContent = discountPct + '%';
-    document.getElementById('sale-price').textContent = fmtMoney(salePrice);
-    document.getElementById('sale-revenue').textContent = fmtMoney(saleRevenue);
-    document.getElementById('sale-costs').textContent = fmtMoney(total);
-    document.getElementById('sale-profit').textContent = fmtMoney(saleProfit);
-
-    var profitRow = document.getElementById('sale-profit-row');
-    profitRow.classList.remove('profit-pos', 'profit-neg');
-    profitRow.classList.add(saleProfit >= 0 ? 'profit-pos' : 'profit-neg');
-
-    document.getElementById('sale-preview').classList.add('visible');
+  function round3(n) {
+    return Math.round(n * 1000) / 1000;
   }
 
-  /* Business logic alerts */
-  if (plan === 'connect' && msrp > 80 && ship === 0) showAlert('alert-free-shipping');
-  if (plan === 'basic' && ship > 0) showAlert('alert-basic-shipping');
-}
+  // =====================
+  // DOM CACHE
+  // =====================
+  function cacheElements() {
+    const ids = [
+      'btn-connect', 'btn-basic',
+      'cogs', 'cogs-err', 'cogs-warn',
+      'bundle', 'bundle-minus', 'bundle-plus', 'bundle-hint', 'bundle-warn',
+      'fulfillment', 'ful-err', 'ful-warn',
+      'shipping', 'ship-desc', 'ship-err', 'ship-warn',
+      'total-display',
+      'margin', 'margin-display', 'margin-warn',
+      'discount', 'discount-display', 'discount-warn',
+      'alert-denom-error', 'alert-denom-small',
+      'result-badges', 'msrp-output', 'msrp-hint',
+      'sale-preview', 'sale-pct', 'sale-price', 'sale-revenue', 'sale-costs', 'sale-profit', 'sale-profit-row',
+      'summary-box', 's-cogs', 's-bundle', 's-prod-total', 's-ful', 's-ship', 's-total',
+      's-plan-lbl', 's-plan-val', 's-margin-lbl', 's-margin-val',
+      's-discount-row', 's-discount-lbl', 's-discount-val', 's-net',
+      'smart-warning', 'sw-title-text', 'sw-body', 'sw-suggest'
+    ];
+    ids.forEach(function (id) {
+      const camel = id.replace(/-([a-z])/g, function (_, c) { return c.toUpperCase(); });
+      dom[camel] = document.getElementById(id);
+    });
+  }
 
-document.addEventListener('DOMContentLoaded', function() { calc(); });
+  // =====================
+  // DOM HELPERS
+  // =====================
+  function setFieldMessage(el, msg) {
+    if (!el) return;
+    el.textContent = msg;
+    el.classList.toggle('visible', !!msg);
+  }
+
+  function clearFieldMessages(errEl, warnEl) {
+    setFieldMessage(errEl, '');
+    setFieldMessage(warnEl, '');
+  }
+
+  function showAlert(el) { if (el) el.classList.add('visible'); }
+  function hideAlert(el) { if (el) el.classList.remove('visible'); }
+
+  // Safely build markup with bold spans without using innerHTML for user data.
+  // parts: array of strings or { text, bold: true }
+  function buildMixedText(parts) {
+    const frag = document.createDocumentFragment();
+    parts.forEach(function (p) {
+      if (typeof p === 'string') {
+        frag.appendChild(document.createTextNode(p));
+      } else if (p && p.text) {
+        if (p.bold) {
+          const strong = document.createElement('strong');
+          strong.textContent = p.text;
+          frag.appendChild(strong);
+        } else {
+          frag.appendChild(document.createTextNode(p.text));
+        }
+      }
+    });
+    return frag;
+  }
+
+  function replaceChildren(el, node) {
+    while (el.firstChild) el.removeChild(el.firstChild);
+    if (node) el.appendChild(node);
+  }
+
+  // =====================
+  // EVENT HANDLERS
+  // =====================
+  function setPlan(newPlan) {
+    plan = newPlan;
+    dom.btnConnect.setAttribute('aria-pressed', newPlan === 'connect' ? 'true' : 'false');
+    dom.btnBasic.setAttribute('aria-pressed', newPlan === 'basic' ? 'true' : 'false');
+
+    if (newPlan === 'basic') {
+      dom.shipDesc.textContent = 'On the Basic Plan, Bubble Goods covers all shipping label costs. Enter $0.00 here.';
+      dom.shipping.value = '0.00';
+      dom.shipping.setAttribute('readonly', 'true');
+      dom.shipping.classList.add('disabled-look');
+    } else {
+      dom.shipDesc.textContent = 'On the Connect Plan, enter your actual shipping label cost (typically around $10.50). This is the cost you absorb when a customer\u2019s order crosses $80 and qualifies for free shipping.';
+      dom.shipping.removeAttribute('readonly');
+      dom.shipping.classList.remove('disabled-look');
+    }
+    clearFieldMessages(dom.shipErr, dom.shipWarn);
+    calc();
+  }
+
+  function onMoneyInput(input, errEl, warnEl) {
+    clearFieldMessages(errEl, warnEl);
+    input.classList.remove('has-error');
+    const raw = input.value;
+    if (raw !== '' && parseFloat(raw) < 0) {
+      input.classList.add('has-error');
+      setFieldMessage(errEl, 'Value cannot be negative. Enter 0 or a positive amount.');
+    }
+    calc();
+  }
+
+  function onMoneyBlur(input, errEl, warnEl) {
+    clearFieldMessages(errEl, warnEl);
+    input.classList.remove('has-error');
+    const raw = input.value;
+    if (raw === '' || raw === null) { input.value = ''; calc(); return; }
+    const n = parseFloat(raw);
+    if (!Number.isFinite(n)) {
+      input.value = '';
+      setFieldMessage(errEl, 'Please enter a valid number.');
+      input.classList.add('has-error');
+      calc();
+      return;
+    }
+    if (n < 0) {
+      input.value = '0.00';
+      setFieldMessage(warnEl, 'Negative values are not valid here. Reset to $0.00.');
+      calc();
+      return;
+    }
+    input.value = n.toFixed(2);
+    if (n > HIGH_INPUT_WARNING) {
+      setFieldMessage(warnEl, 'This is a high value — double-check it looks right.');
+    }
+    calc();
+  }
+
+  function adjustBundle(delta) {
+    const current = sanitizeInt(dom.bundle.value, MIN_BUNDLE, MAX_BUNDLE);
+    let next = current + delta;
+    if (next < MIN_BUNDLE) next = MIN_BUNDLE;
+    if (next > MAX_BUNDLE) next = MAX_BUNDLE;
+    dom.bundle.value = next;
+    onBundleInput();
+  }
+
+  function onBundleInput() {
+    const raw = dom.bundle.value;
+    setFieldMessage(dom.bundleWarn, '');
+    dom.bundle.classList.remove('has-error');
+    const parsed = parseInt(raw, 10);
+    if (raw !== '' && (parsed < 1 || !Number.isFinite(parsed))) {
+      dom.bundle.classList.add('has-error');
+    }
+    const n = sanitizeInt(raw, MIN_BUNDLE, MAX_BUNDLE);
+    dom.bundleHint.textContent = n === 1 ? 'Single item' : n + '-pack bundle';
+    calc();
+  }
+
+  function onBundleBlur() {
+    const n = sanitizeInt(dom.bundle.value, MIN_BUNDLE, MAX_BUNDLE);
+    dom.bundle.value = String(n);
+    dom.bundle.classList.remove('has-error');
+    setFieldMessage(dom.bundleWarn, '');
+    if (n >= HIGH_BUNDLE_WARNING) {
+      setFieldMessage(dom.bundleWarn, 'A large bundle is unusual — double-check this is intentional.');
+    }
+    onBundleInput();
+  }
+
+  function onMarginInput() {
+    const v = parseInt(dom.margin.value, 10);
+    dom.marginDisplay.textContent = v + '%';
+    dom.margin.setAttribute('aria-valuenow', String(v));
+    setFieldMessage(dom.marginWarn, '');
+    if (v < MIN_SAFE_MARGIN) {
+      setFieldMessage(dom.marginWarn, 'A margin below 10% may not be sustainable. Consider at least 20%.');
+    } else if (v > MAX_SAFE_MARGIN) {
+      setFieldMessage(dom.marginWarn, 'A margin above 45% is unusually high and may make your listing price uncompetitive.');
+    }
+    calc();
+  }
+
+  function onDiscountInput() {
+    const v = parseInt(dom.discount.value, 10);
+    dom.discountDisplay.textContent = v + '%';
+    dom.discount.setAttribute('aria-valuenow', String(v));
+    setFieldMessage(dom.discountWarn, '');
+    if (v >= HIGH_DISCOUNT_WARNING) {
+      setFieldMessage(dom.discountWarn, 'Discounts of 50% or more require very high markups and may not be sustainable long term.');
+    }
+    calc();
+  }
+
+  // =====================
+  // BADGE RENDERING (no innerHTML)
+  // =====================
+  function renderBadges(share, bundleSize, discountPct) {
+    const container = dom.resultBadges;
+    while (container.firstChild) container.removeChild(container.firstChild);
+
+    const planBadge = document.createElement('span');
+    planBadge.className = 'result-badge';
+    planBadge.textContent = (plan === 'connect' ? 'Connect' : 'Basic') + ' · ' + Math.round(share * 100) + '%';
+    container.appendChild(planBadge);
+
+    if (bundleSize > 1) {
+      const bundleBadge = document.createElement('span');
+      bundleBadge.className = 'result-badge bundle';
+      bundleBadge.textContent = bundleSize + '-pack';
+      container.appendChild(bundleBadge);
+    }
+    if (discountPct > 0) {
+      const saleBadge = document.createElement('span');
+      saleBadge.className = 'result-badge sale';
+      saleBadge.textContent = discountPct + '% sale ready';
+      container.appendChild(saleBadge);
+    }
+  }
+
+  // =====================
+  // SMART WARNING
+  // =====================
+  function renderSmartWarning(cogs, fulfillment, shipping) {
+    dom.smartWarning.classList.remove('visible');
+
+    if (plan !== 'connect') return;
+
+    // Don't show until user has started entering data
+    if (cogs <= 0 && fulfillment <= 0) return;
+
+    // If shipping is entered, no warning
+    if (shipping > 0) return;
+
+    // Connect Plan + missing shipping cost = almost certainly a mistake
+    dom.swTitleText.textContent = 'Heads up — shipping label cost missing';
+
+    replaceChildren(dom.swBody, buildMixedText([
+      'On the Connect Plan, ',
+      { text: 'you are responsible for the shipping label', bold: true },
+      ' whenever a customer\u2019s order crosses ',
+      { text: '$' + FREE_SHIPPING_THRESHOLD, bold: true },
+      ' — they get free shipping, but the label cost comes out of your pocket. Leaving this at $0.00 means the recommended price above may not protect your margin on larger orders.'
+    ]));
+
+    replaceChildren(dom.swSuggest, buildMixedText([
+      { text: 'What to do: ', bold: true },
+      'Enter your actual shipping label cost in Step 5 — typically around ',
+      { text: '$' + TYPICAL_SHIPPING_COST.toFixed(2), bold: true },
+      '.'
+    ]));
+
+    dom.smartWarning.classList.add('visible');
+  }
+
+  // =====================
+  // MAIN CALCULATION
+  // =====================
+  function calc() {
+    const share = PLAN_SHARES[plan];
+    const cogs = sanitizeMoney(dom.cogs.value);
+    const bundleSize = sanitizeInt(dom.bundle.value, MIN_BUNDLE, MAX_BUNDLE);
+    const ful = sanitizeMoney(dom.fulfillment.value);
+    const ship = plan === 'basic' ? 0 : sanitizeMoney(dom.shipping.value);
+    const marginPct = parseInt(dom.margin.value, 10);
+    const margin = marginPct / 100;
+    const discountPct = parseInt(dom.discount.value, 10);
+    const discount = discountPct / 100;
+
+    const prodTotal = round2(cogs * bundleSize);
+    const total = round2(prodTotal + ful + ship);
+    const saleFactor = round3(1 - discount);
+    const effectiveDenom = round3((share - margin) * saleFactor);
+
+    // Update auto-fields and summary
+    dom.totalDisplay.textContent = fmtMoney(total);
+    renderBadges(share, bundleSize, discountPct);
+
+    dom.sCogs.textContent = fmtMoney(cogs);
+    dom.sBundle.textContent = bundleSize === 1 ? '1 (single item)' : bundleSize + '-pack';
+    dom.sProdTotal.textContent = fmtMoney(prodTotal);
+    dom.sFul.textContent = fmtMoney(ful);
+    dom.sShip.textContent = fmtMoney(ship);
+    dom.sTotal.textContent = fmtMoney(total);
+    dom.sPlanLbl.textContent = 'Plan share (' + Math.round(share * 100) + '%)';
+    dom.sPlanVal.textContent = share.toFixed(2);
+    dom.sMarginLbl.textContent = 'Profit goal (' + marginPct + '%)';
+    dom.sMarginVal.textContent = margin.toFixed(2);
+
+    if (discountPct > 0) {
+      dom.sDiscountLbl.textContent = 'Sale buffer (' + discountPct + '% off)';
+      dom.sDiscountVal.textContent = '× ' + saleFactor.toFixed(2);
+      dom.sDiscountRow.style.display = 'flex';
+    } else {
+      dom.sDiscountRow.style.display = 'none';
+    }
+    dom.sNet.textContent = effectiveDenom.toFixed(3);
+
+    // Reset all alerts
+    hideAlert(dom.alertDenomError);
+    hideAlert(dom.alertDenomSmall);
+    dom.salePreview.classList.remove('visible');
+    dom.smartWarning.classList.remove('visible');
+
+    // Denominator validation
+    if ((share - margin) <= 0 || effectiveDenom <= 0) {
+      dom.msrpOutput.className = 'result-price error-color';
+      dom.msrpOutput.textContent = 'Cannot calculate';
+      dom.msrpHint.textContent = 'Your margin or discount makes profit impossible at this plan share.';
+      dom.summaryBox.style.display = 'none';
+      showAlert(dom.alertDenomError);
+      return;
+    }
+
+    // No costs entered yet
+    if (total === 0) {
+      dom.msrpOutput.className = 'result-price muted';
+      dom.msrpOutput.textContent = '—';
+      dom.msrpHint.textContent = 'Fill in your costs above to see your recommendation';
+      dom.summaryBox.style.display = 'none';
+      return;
+    }
+
+    const msrp = round2(total / effectiveDenom);
+
+    if (!Number.isFinite(msrp) || msrp > MAX_REASONABLE_MSRP) {
+      dom.msrpOutput.className = 'result-price error-color';
+      dom.msrpOutput.textContent = 'Check inputs';
+      dom.msrpHint.textContent = 'Result is outside a reasonable range — review your values.';
+      dom.summaryBox.style.display = 'none';
+      return;
+    }
+
+    if (effectiveDenom < EXTREME_DENOMINATOR) showAlert(dom.alertDenomSmall);
+
+    dom.msrpOutput.className = 'result-price';
+    dom.msrpOutput.textContent = fmtMoney(msrp);
+
+    if (discountPct > 0) {
+      dom.msrpHint.textContent = 'Recommended for ' + bundleSize + '-pack' + (bundleSize === 1 ? ' (single item)' : '') + ', priced to survive a ' + discountPct + '% sale';
+    } else if (bundleSize > 1) {
+      dom.msrpHint.textContent = 'Recommended for ' + bundleSize + '-pack bundle';
+    } else {
+      dom.msrpHint.textContent = 'Recommended listing price for this product';
+    }
+    dom.summaryBox.style.display = 'block';
+
+    // Sale preview
+    if (discountPct > 0) {
+      const salePrice = round2(msrp * saleFactor);
+      const saleRevenue = round2(salePrice * share);
+      const saleProfit = round2(saleRevenue - total);
+      dom.salePct.textContent = discountPct + '%';
+      dom.salePrice.textContent = fmtMoney(salePrice);
+      dom.saleRevenue.textContent = fmtMoney(saleRevenue);
+      dom.saleCosts.textContent = fmtMoney(total);
+      dom.saleProfit.textContent = fmtMoney(saleProfit);
+      dom.saleProfitRow.classList.remove('profit-pos', 'profit-neg');
+      dom.saleProfitRow.classList.add(saleProfit >= 0 ? 'profit-pos' : 'profit-neg');
+      dom.salePreview.classList.add('visible');
+    }
+
+    // Note: No "Basic Plan should be $0" alert needed — setPlan auto-resets
+    // shipping to 0 and locks the field, so the condition can't occur.
+
+    // Smart shipping warning (Connect Plan + missing shipping)
+    try {
+      renderSmartWarning(cogs, ful, ship);
+    } catch (err) {
+      dom.smartWarning.classList.remove('visible');
+      console.error('Warning render error:', err);
+    }
+  }
+
+  // =====================
+  // EVENT WIRING
+  // =====================
+  function wireEvents() {
+    dom.btnConnect.addEventListener('click', function () { setPlan('connect'); });
+    dom.btnBasic.addEventListener('click', function () { setPlan('basic'); });
+
+    dom.cogs.addEventListener('input', function () { onMoneyInput(dom.cogs, dom.cogsErr, dom.cogsWarn); });
+    dom.cogs.addEventListener('blur', function () { onMoneyBlur(dom.cogs, dom.cogsErr, dom.cogsWarn); });
+
+    dom.fulfillment.addEventListener('input', function () { onMoneyInput(dom.fulfillment, dom.fulErr, dom.fulWarn); });
+    dom.fulfillment.addEventListener('blur', function () { onMoneyBlur(dom.fulfillment, dom.fulErr, dom.fulWarn); });
+
+    dom.shipping.addEventListener('input', function () { onMoneyInput(dom.shipping, dom.shipErr, dom.shipWarn); });
+    dom.shipping.addEventListener('blur', function () { onMoneyBlur(dom.shipping, dom.shipErr, dom.shipWarn); });
+
+    dom.bundle.addEventListener('input', onBundleInput);
+    dom.bundle.addEventListener('blur', onBundleBlur);
+    dom.bundleMinus.addEventListener('click', function () { adjustBundle(-1); });
+    dom.bundlePlus.addEventListener('click', function () { adjustBundle(1); });
+
+    dom.margin.addEventListener('input', onMarginInput);
+    dom.discount.addEventListener('input', onDiscountInput);
+  }
+
+  // =====================
+  // INIT
+  // =====================
+  document.addEventListener('DOMContentLoaded', function () {
+    cacheElements();
+    wireEvents();
+    calc();
+  });
+
+})();
 </script>
 </body>
 </html>
