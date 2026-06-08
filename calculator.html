@@ -155,11 +155,11 @@
         <div class="slabel" id="step-1-label">Select your fulfillment plan</div>
         <div class="sdesc" id="step-1-desc">Select the plan you are signed up with on Bubble Goods. For more information on plans, visit our <a href="https://bubblegoods.zendesk.com/hc/en-us/articles/29659182467604-Selling-on-Bubble-Goods-Plans-Fees-Fulfillment-Overview" target="_blank" rel="noopener noreferrer">help center</a> here.</div>
         <div class="plan-picker" role="group" aria-labelledby="step-1-label">
-          <button type="button" class="plan-btn" id="btn-connect" aria-pressed="true" data-plan="connect">
-            <span class="pname">Connect Plan</span>
-          </button>
           <button type="button" class="plan-btn" id="btn-basic" aria-pressed="false" data-plan="basic">
             <span class="pname">Basic Plan</span>
+          </button>
+          <button type="button" class="plan-btn" id="btn-connect" aria-pressed="false" data-plan="connect">
+            <span class="pname">Connect Plan</span>
           </button>
         </div>
       </div>
@@ -211,8 +211,8 @@
       </div>
     </div>
 
-    <!-- Step 5: Shipping (hidden when Basic Plan selected) -->
-    <div class="step-card" id="shipping-card" data-step>
+    <!-- Step 5: Shipping (hidden when Basic Plan selected or no plan chosen) -->
+    <div class="step-card hidden" id="shipping-card" data-step>
       <div class="snum green" aria-hidden="true">5</div>
       <div class="sbody">
         <label class="slabel" for="shipping">Shipping label cost</label>
@@ -231,7 +231,11 @@
       <div class="snum" aria-hidden="true">6</div>
       <div class="sbody">
         <div class="slabel">Total costs</div>
-        <div class="sdesc">Auto-calculated. Production cost (× bundle size) + packing labor + shipping label.</div>
+        <div class="sdesc">
+          Auto-calculated. Production cost (× bundle size) + packing labor + shipping label.
+          <br><br>
+          <em>*The cost of shipping labels varies depending on which plan you are on with Bubble Goods. For more information on plans, please visit this <a href="https://bubblegoods.zendesk.com/hc/en-us/articles/29659182467604-Selling-on-Bubble-Goods-Plans-Fees-Fulfillment-Overview" target="_blank" rel="noopener noreferrer">help article</a>.</em>
+        </div>
         <div class="auto-val" id="total-display" aria-live="polite">$0.00</div>
       </div>
     </div>
@@ -286,9 +290,7 @@
   <section class="result-card" aria-labelledby="result-label">
     <div class="result-header">
       <span class="result-label-text" id="result-label">Recommended listing price (MSRP)</span>
-      <span class="result-badges" id="result-badges">
-        <span class="result-badge">Connect · 75%</span>
-      </span>
+      <span class="result-badges" id="result-badges"></span>
     </div>
     <div class="result-body">
       <div class="result-price muted" id="msrp-output" aria-live="polite">—</div>
@@ -364,7 +366,7 @@
   // =====================
   // STATE
   // =====================
-  let plan = 'connect';
+  let plan = null; // No plan selected by default; seller must actively choose
   const dom = {}; // DOM cache, populated by cacheElements()
 
   // =====================
@@ -678,6 +680,23 @@
   // MAIN CALCULATION
   // =====================
   function calc() {
+    // No plan selected yet — skip all math (UI shows default state from initial HTML)
+    if (plan === null) {
+      dom.msrpOutput.className = 'result-price muted';
+      dom.msrpOutput.textContent = '—';
+      dom.summaryBox.style.display = 'none';
+      dom.totalDisplay.textContent = '$0.00';
+      // Clear all badges
+      const container = dom.resultBadges;
+      while (container.firstChild) container.removeChild(container.firstChild);
+      // Hide all alerts and previews
+      hideAlert(dom.alertDenomError);
+      hideAlert(dom.alertDenomSmall);
+      dom.salePreview.classList.remove('visible');
+      dom.smartWarning.classList.remove('visible');
+      return;
+    }
+
     const share = PLAN_SHARES[plan];
     const cogs = sanitizeMoney(dom.cogs.value);
     const bundleSize = sanitizeInt(dom.bundle.value, MIN_BUNDLE, MAX_BUNDLE);
@@ -821,7 +840,8 @@
   document.addEventListener('DOMContentLoaded', function () {
     cacheElements();
     wireEvents();
-    setPlan('connect'); // Initialize plan state (also sets shipping description and renumbers steps)
+    renumberSteps(); // Step 5 starts hidden, so steps display as 1–7 until a plan is picked
+    calc();          // Will show "Select a plan" prompt since plan === null
   });
 
 })();
