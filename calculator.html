@@ -25,22 +25,23 @@
   .step-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
   .step-card { background: #FFFFE6; border: 1px solid rgba(0,0,0,0.1); border-radius: 12px; padding: 14px 16px; display: flex; align-items: flex-start; gap: 14px; }
   .step-card.dimmed { opacity: 0.72; }
+  .step-card.hidden { display: none; }
   .snum { width: 26px; height: 26px; border-radius: 50%; background: #FFFFC8; border: 1px solid rgba(0,0,0,0.1); font-size: 12px; font-weight: 700; color: #888; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
   .snum.green { background: #d4f2e7; color: #0f6e56; border-color: #9fe1cb; }
   .sbody { flex: 1; min-width: 0; } /* min-width: 0 prevents flex item from overflowing parent */
   .slabel { font-size: 14px; font-weight: 700; color: #111; margin-bottom: 2px; }
   .sdesc { font-size: 12px; color: #888; margin-bottom: 10px; line-height: 1.45; }
+  .sdesc a { color: #0f6e56; text-decoration: underline; font-weight: 600; }
+  .sdesc a:hover { color: #074d35; }
 
   /* ── Plan picker ── */
   .plan-picker { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-  .plan-btn { padding: 11px 8px; border: 1.5px solid rgba(0,0,0,0.12); border-radius: 10px; background: #FFFFD2; cursor: pointer; text-align: center; transition: all 0.15s; font: inherit; }
+  .plan-btn { padding: 14px 8px; border: 1.5px solid rgba(0,0,0,0.12); border-radius: 10px; background: #FFFFD2; cursor: pointer; text-align: center; transition: all 0.15s; font: inherit; }
   .plan-btn:hover { border-color: rgba(0,0,0,0.25); }
   .plan-btn:focus-visible { outline: 2px solid #1d9e75; outline-offset: 2px; }
   .plan-btn[aria-pressed="true"] { border-color: #1d9e75; background: #d4f2e7; }
-  .plan-btn .pname { font-size: 13px; font-weight: 700; color: #333; display: block; margin-bottom: 1px; }
-  .plan-btn .pshare { font-size: 11px; color: #999; display: block; }
+  .plan-btn .pname { font-size: 14px; font-weight: 700; color: #333; display: block; }
   .plan-btn[aria-pressed="true"] .pname { color: #085041; }
-  .plan-btn[aria-pressed="true"] .pshare { color: #1d9e75; }
 
   /* ── Inputs ── */
   .input-wrap { position: relative; }
@@ -148,26 +149,24 @@
   <div class="step-list">
 
     <!-- Step 1: Plan selection -->
-    <div class="step-card">
+    <div class="step-card" data-step>
       <div class="snum green" aria-hidden="true">1</div>
       <div class="sbody">
-        <div class="slabel" id="step-1-label">Choose your plan</div>
-        <div class="sdesc" id="step-1-desc">Your plan determines how much of the sale you keep. The Basic Plan covers all shipping costs; the Connect Plan gives a higher share but you handle shipping over $80.</div>
+        <div class="slabel" id="step-1-label">Select your fulfillment plan</div>
+        <div class="sdesc" id="step-1-desc">Select the plan you are signed up with on Bubble Goods. For more information on plans, visit our <a href="https://bubblegoods.zendesk.com/hc/en-us/articles/29659182467604-Selling-on-Bubble-Goods-Plans-Fees-Fulfillment-Overview" target="_blank" rel="noopener noreferrer">help center</a> here.</div>
         <div class="plan-picker" role="group" aria-labelledby="step-1-label">
           <button type="button" class="plan-btn" id="btn-connect" aria-pressed="true" data-plan="connect">
             <span class="pname">Connect Plan</span>
-            <span class="pshare">Keep 75% of sale</span>
           </button>
           <button type="button" class="plan-btn" id="btn-basic" aria-pressed="false" data-plan="basic">
             <span class="pname">Basic Plan</span>
-            <span class="pshare">Keep 65% of sale</span>
           </button>
         </div>
       </div>
     </div>
 
     <!-- Step 2: Production cost -->
-    <div class="step-card">
+    <div class="step-card" data-step>
       <div class="snum green" aria-hidden="true">2</div>
       <div class="sbody">
         <label class="slabel" for="cogs">Production cost (per unit)</label>
@@ -182,7 +181,7 @@
     </div>
 
     <!-- Step 3: Bundle size -->
-    <div class="step-card">
+    <div class="step-card" data-step>
       <div class="snum green" aria-hidden="true">3</div>
       <div class="sbody">
         <label class="slabel" for="bundle">Bundle size</label>
@@ -198,7 +197,7 @@
     </div>
 
     <!-- Step 4: Fulfillment -->
-    <div class="step-card">
+    <div class="step-card" data-step>
       <div class="snum green" aria-hidden="true">4</div>
       <div class="sbody">
         <label class="slabel" for="fulfillment">Box and packing labor</label>
@@ -212,12 +211,12 @@
       </div>
     </div>
 
-    <!-- Step 5: Shipping -->
-    <div class="step-card">
+    <!-- Step 5: Shipping (hidden when Basic Plan selected) -->
+    <div class="step-card" id="shipping-card" data-step>
       <div class="snum green" aria-hidden="true">5</div>
       <div class="sbody">
         <label class="slabel" for="shipping">Shipping label cost</label>
-        <div class="sdesc" id="ship-desc">On the Connect Plan, enter your actual shipping label cost (typically around $10.50). This is the cost you absorb when a customer's order crosses $80 and qualifies for free shipping.</div>
+        <div class="sdesc" id="ship-desc"></div>
         <div class="input-wrap">
           <span class="ipfx" aria-hidden="true">$</span>
           <input class="step-input" type="number" id="shipping" min="0" step="0.01" placeholder="0.00" inputmode="decimal" autocomplete="off" aria-describedby="ship-desc ship-err ship-warn">
@@ -228,7 +227,7 @@
     </div>
 
     <!-- Step 6: Total costs (auto) -->
-    <div class="step-card dimmed">
+    <div class="step-card dimmed" data-step>
       <div class="snum" aria-hidden="true">6</div>
       <div class="sbody">
         <div class="slabel">Total costs</div>
@@ -238,11 +237,11 @@
     </div>
 
     <!-- Step 7: Margin slider -->
-    <div class="step-card">
+    <div class="step-card" data-step>
       <div class="snum green" aria-hidden="true">7</div>
       <div class="sbody">
         <label class="slabel" for="margin">Your profit margin goal</label>
-        <div class="sdesc" id="margin-desc">The net profit percentage you want to keep from every full-price sale. We suggest 20% to 35% for a healthy business.</div>
+        <div class="sdesc" id="margin-desc">This is the net profit you are targeting for your business as you set your listing price on Bubble Goods. For example, if you want a 25% profit margin, you select 25% in the Profit Margin slider. We recommend targeting 20% to 35%.</div>
         <div class="slider-row">
           <input class="slider-track" type="range" id="margin" min="5" max="60" value="25" step="1" aria-describedby="margin-desc margin-warn" aria-valuemin="5" aria-valuemax="60" aria-valuenow="25">
           <span class="slider-val" id="margin-display" aria-live="polite">25%</span>
@@ -253,11 +252,11 @@
     </div>
 
     <!-- Step 8: Discount slider -->
-    <div class="step-card">
+    <div class="step-card" data-step>
       <div class="snum green" aria-hidden="true">8</div>
       <div class="sbody">
         <label class="slabel" for="discount">Future sale or discount (optional)</label>
-        <div class="sdesc" id="discount-desc">Planning to put this product on sale? Drag to factor in a discount. The calculator will recommend a higher MSRP so your margin survives the discount.</div>
+        <div class="sdesc" id="discount-desc">Planning to put this product on sale? The calculator will recommend a listing price so your margin can support the discount.</div>
         <div class="slider-row">
           <input class="slider-track discount-track" type="range" id="discount" min="0" max="60" value="0" step="1" aria-describedby="discount-desc discount-warn" aria-valuemin="0" aria-valuemax="60" aria-valuenow="0">
           <span class="slider-val" id="discount-display" aria-live="polite">0%</span>
@@ -360,6 +359,7 @@
   const MAX_BUNDLE = 50;
   const DEFAULT_MARGIN = 25;
   const TYPICAL_SHIPPING_COST = 10.50;
+  const HELP_CENTER_URL = 'https://bubblegoods.zendesk.com/hc/en-us/articles/29659182467604-Selling-on-Bubble-Goods-Plans-Fees-Fulfillment-Overview';
 
   // =====================
   // STATE
@@ -409,7 +409,7 @@
       'cogs', 'cogs-err', 'cogs-warn',
       'bundle', 'bundle-minus', 'bundle-plus', 'bundle-hint', 'bundle-warn',
       'fulfillment', 'ful-err', 'ful-warn',
-      'shipping', 'ship-desc', 'ship-err', 'ship-warn',
+      'shipping', 'shipping-card', 'ship-desc', 'ship-err', 'ship-warn',
       'total-display',
       'margin', 'margin-display', 'margin-warn',
       'discount', 'discount-display', 'discount-warn',
@@ -444,15 +444,22 @@
   function showAlert(el) { if (el) el.classList.add('visible'); }
   function hideAlert(el) { if (el) el.classList.remove('visible'); }
 
-  // Safely build markup with bold spans without using innerHTML for user data.
-  // parts: array of strings or { text, bold: true }
+  // Safely build markup with bold spans / links without using innerHTML for user data.
+  // parts: array of strings or { text, bold } or { text, link }
   function buildMixedText(parts) {
     const frag = document.createDocumentFragment();
     parts.forEach(function (p) {
       if (typeof p === 'string') {
         frag.appendChild(document.createTextNode(p));
       } else if (p && p.text) {
-        if (p.bold) {
+        if (p.link) {
+          const a = document.createElement('a');
+          a.href = p.link;
+          a.target = '_blank';
+          a.rel = 'noopener noreferrer';
+          a.textContent = p.text;
+          frag.appendChild(a);
+        } else if (p.bold) {
           const strong = document.createElement('strong');
           strong.textContent = p.text;
           frag.appendChild(strong);
@@ -469,6 +476,18 @@
     if (node) el.appendChild(node);
   }
 
+  // Renumber visible step cards 1..N so hiding a step doesn't leave a gap.
+  function renumberSteps() {
+    const cards = document.querySelectorAll('.step-card[data-step]');
+    let n = 0;
+    cards.forEach(function (card) {
+      if (card.classList.contains('hidden')) return;
+      n++;
+      const snum = card.querySelector('.snum');
+      if (snum) snum.textContent = String(n);
+    });
+  }
+
   // =====================
   // EVENT HANDLERS
   // =====================
@@ -478,15 +497,24 @@
     dom.btnBasic.setAttribute('aria-pressed', newPlan === 'basic' ? 'true' : 'false');
 
     if (newPlan === 'basic') {
-      dom.shipDesc.textContent = 'On the Basic Plan, Bubble Goods covers all shipping label costs. Enter $0.00 here.';
+      // Hide the entire shipping step on Basic Plan
+      dom.shippingCard.classList.add('hidden');
       dom.shipping.value = '0.00';
       dom.shipping.setAttribute('readonly', 'true');
       dom.shipping.classList.add('disabled-look');
     } else {
-      dom.shipDesc.textContent = 'On the Connect Plan, enter your actual shipping label cost (typically around $10.50). This is the cost you absorb when a customer\u2019s order crosses $80 and qualifies for free shipping.';
+      // Connect Plan: show step 5 with a description that links to the help center
+      dom.shippingCard.classList.remove('hidden');
+      replaceChildren(dom.shipDesc, buildMixedText([
+        'For Connect Plan Only (For more information regarding our fulfillment plans, please refer to this ',
+        { text: 'Help Center Article', link: HELP_CENTER_URL },
+        ')'
+      ]));
       dom.shipping.removeAttribute('readonly');
       dom.shipping.classList.remove('disabled-look');
     }
+
+    renumberSteps();
     clearFieldMessages(dom.shipErr, dom.shipWarn);
     calc();
   }
@@ -753,9 +781,6 @@
       dom.salePreview.classList.add('visible');
     }
 
-    // Note: No "Basic Plan should be $0" alert needed — setPlan auto-resets
-    // shipping to 0 and locks the field, so the condition can't occur.
-
     // Smart shipping warning (Connect Plan + missing shipping)
     try {
       renderSmartWarning(cogs, ful, ship);
@@ -796,7 +821,7 @@
   document.addEventListener('DOMContentLoaded', function () {
     cacheElements();
     wireEvents();
-    calc();
+    setPlan('connect'); // Initialize plan state (also sets shipping description and renumbers steps)
   });
 
 })();
