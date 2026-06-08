@@ -143,7 +143,7 @@
   <header class="header">
     <div class="eyebrow">🌿 Bubble Goods</div>
     <h1 class="main-title">Pricing Calculator</h1>
-    <p class="main-sub">Enter your costs below and we'll recommend a listing price<br>that hits your profit goal — even on sale.</p>
+    <p class="main-sub">Enter your costs below and we'll recommend a listing price<br>that hits your profit goal.</p>
   </header>
 
   <div class="step-list">
@@ -215,7 +215,7 @@
     <div class="step-card hidden" id="shipping-card" data-step>
       <div class="snum green" aria-hidden="true">5</div>
       <div class="sbody">
-        <label class="slabel" for="shipping">Shipping label cost</label>
+        <label class="slabel" for="shipping">Shipping label cost (For Connect Plan Only)</label>
         <div class="sdesc" id="ship-desc"></div>
         <div class="input-wrap">
           <span class="ipfx" aria-hidden="true">$</span>
@@ -508,9 +508,8 @@
       // Connect Plan: show step 5 with a description that links to the help center
       dom.shippingCard.classList.remove('hidden');
       replaceChildren(dom.shipDesc, buildMixedText([
-        'For Connect Plan Only (For more information regarding our fulfillment plans, please refer to this ',
-        { text: 'Help Center Article', link: HELP_CENTER_URL },
-        ')'
+        'For more information regarding our plans, please refer to this ',
+        { text: 'Help Center Article', link: HELP_CENTER_URL }
       ]));
       dom.shipping.removeAttribute('readonly');
       dom.shipping.classList.remove('disabled-look');
