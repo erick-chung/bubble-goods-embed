@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bubble Goods MSRP Calculator</title>
+<title>Bubble Goods Pricing Calculator</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -25,29 +25,21 @@
   .step-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
   .step-card { background: #FFFFE6; border: 1px solid rgba(0,0,0,0.1); border-radius: 12px; padding: 14px 16px; display: flex; align-items: flex-start; gap: 14px; }
   .step-card.dimmed { opacity: 0.72; }
-  .step-card.hidden { display: none; }
   .snum { width: 26px; height: 26px; border-radius: 50%; background: #FFFFC8; border: 1px solid rgba(0,0,0,0.1); font-size: 12px; font-weight: 700; color: #888; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
   .snum.green { background: #d4f2e7; color: #0f6e56; border-color: #9fe1cb; }
-  .sbody { flex: 1; min-width: 0; } /* min-width: 0 prevents flex item from overflowing parent */
+  .sbody { flex: 1; min-width: 0; }
   .slabel { font-size: 14px; font-weight: 700; color: #111; margin-bottom: 2px; }
   .sdesc { font-size: 12px; color: #888; margin-bottom: 10px; line-height: 1.45; }
   .sdesc a { color: #0f6e56; text-decoration: underline; font-weight: 600; }
   .sdesc a:hover { color: #074d35; }
 
-  /* ── Plan picker ── */
-  .plan-picker { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-  .plan-btn { padding: 14px 8px; border: 1.5px solid rgba(0,0,0,0.12); border-radius: 10px; background: #FFFFD2; cursor: pointer; text-align: center; transition: all 0.15s; font: inherit; }
-  .plan-btn:hover { border-color: rgba(0,0,0,0.25); }
-  .plan-btn:focus-visible { outline: 2px solid #1d9e75; outline-offset: 2px; }
-  .plan-btn[aria-pressed="true"] { border-color: #1d9e75; background: #d4f2e7; }
-  .plan-btn .pname { font-size: 14px; font-weight: 700; color: #333; display: block; }
-  .plan-btn[aria-pressed="true"] .pname { color: #085041; }
-
   /* ── Inputs ── */
   .input-wrap { position: relative; }
   .ipfx { position: absolute; left: 9px; top: 50%; transform: translateY(-50%); font-size: 14px; font-weight: 600; color: #aaa; pointer-events: none; }
+  .ipfx-suffix { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); font-size: 14px; font-weight: 600; color: #aaa; pointer-events: none; }
   .step-input { width: 100%; padding: 9px 12px 9px 24px; border: 1.5px solid rgba(0,0,0,0.12); border-radius: 8px; font-size: 15px; font-weight: 600; color: #111; background: #FFFFD7; outline: none; transition: border-color 0.15s; -moz-appearance: textfield; }
   .step-input.no-prefix { padding-left: 12px; }
+  .step-input.suffix-pct { padding-left: 12px; padding-right: 28px; }
   .step-input::-webkit-outer-spin-button,
   .step-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
   .step-input:focus { border-color: #1d9e75; background: rgba(255,255,255,0.9); }
@@ -148,25 +140,23 @@
 
   <div class="step-list">
 
-    <!-- Step 1: Plan selection -->
-    <div class="step-card" data-step>
+    <!-- Step 1: Take home rate -->
+    <div class="step-card">
       <div class="snum green" aria-hidden="true">1</div>
       <div class="sbody">
-        <div class="slabel" id="step-1-label">Select your fulfillment plan</div>
-        <div class="sdesc" id="step-1-desc">Select the plan you are signed up with on Bubble Goods. For more information on plans, visit our <a href="https://bubblegoods.zendesk.com/hc/en-us/articles/29659182467604-Selling-on-Bubble-Goods-Plans-Fees-Fulfillment-Overview" target="_blank" rel="noopener noreferrer">help center</a> here.</div>
-        <div class="plan-picker" role="group" aria-labelledby="step-1-label">
-          <button type="button" class="plan-btn" id="btn-basic" aria-pressed="false" data-plan="basic">
-            <span class="pname">Basic Plan</span>
-          </button>
-          <button type="button" class="plan-btn" id="btn-connect" aria-pressed="false" data-plan="connect">
-            <span class="pname">Connect Plan</span>
-          </button>
+        <label class="slabel" for="takehome">Your take home rate</label>
+        <div class="sdesc" id="takehome-desc">This is the percentage of each sale you keep after Bubble Goods' commission.</div>
+        <div class="input-wrap">
+          <input class="step-input suffix-pct" type="number" id="takehome" min="1" max="99" step="1" placeholder="75" inputmode="numeric" autocomplete="off" aria-describedby="takehome-desc takehome-err takehome-warn">
+          <span class="ipfx-suffix" aria-hidden="true">%</span>
         </div>
+        <div class="field-error" id="takehome-err" role="alert"></div>
+        <div class="field-warn" id="takehome-warn" aria-live="polite"></div>
       </div>
     </div>
 
     <!-- Step 2: Production cost -->
-    <div class="step-card" data-step>
+    <div class="step-card">
       <div class="snum green" aria-hidden="true">2</div>
       <div class="sbody">
         <label class="slabel" for="cogs">Production cost (per unit)</label>
@@ -181,7 +171,7 @@
     </div>
 
     <!-- Step 3: Bundle size -->
-    <div class="step-card" data-step>
+    <div class="step-card">
       <div class="snum green" aria-hidden="true">3</div>
       <div class="sbody">
         <label class="slabel" for="bundle">Bundle size</label>
@@ -197,7 +187,7 @@
     </div>
 
     <!-- Step 4: Fulfillment -->
-    <div class="step-card" data-step>
+    <div class="step-card">
       <div class="snum green" aria-hidden="true">4</div>
       <div class="sbody">
         <label class="slabel" for="fulfillment">Box and packing labor</label>
@@ -211,12 +201,12 @@
       </div>
     </div>
 
-    <!-- Step 5: Shipping (hidden when Basic Plan selected or no plan chosen) -->
-    <div class="step-card hidden" id="shipping-card" data-step>
+    <!-- Step 5: Shipping label cost (always visible) -->
+    <div class="step-card">
       <div class="snum green" aria-hidden="true">5</div>
       <div class="sbody">
-        <label class="slabel" for="shipping">Shipping label cost (For Connect Plan Only)</label>
-        <div class="sdesc" id="ship-desc"></div>
+        <label class="slabel" for="shipping">Shipping label cost</label>
+        <div class="sdesc" id="ship-desc">Enter your typical shipping label cost. If Bubble Goods covers shipping under your plan, leave this at $0.00. If you're on a plan where you handle shipping over $80, enter your actual cost (typically around $10.50).</div>
         <div class="input-wrap">
           <span class="ipfx" aria-hidden="true">$</span>
           <input class="step-input" type="number" id="shipping" min="0" step="0.01" placeholder="0.00" inputmode="decimal" autocomplete="off" aria-describedby="ship-desc ship-err ship-warn">
@@ -227,7 +217,7 @@
     </div>
 
     <!-- Step 6: Total costs (auto) -->
-    <div class="step-card dimmed" data-step>
+    <div class="step-card dimmed">
       <div class="snum" aria-hidden="true">6</div>
       <div class="sbody">
         <div class="slabel">Total costs</div>
@@ -241,7 +231,7 @@
     </div>
 
     <!-- Step 7: Margin slider -->
-    <div class="step-card" data-step>
+    <div class="step-card">
       <div class="snum green" aria-hidden="true">7</div>
       <div class="sbody">
         <label class="slabel" for="margin">Your profit margin goal</label>
@@ -256,7 +246,7 @@
     </div>
 
     <!-- Step 8: Discount slider -->
-    <div class="step-card" data-step>
+    <div class="step-card">
       <div class="snum green" aria-hidden="true">8</div>
       <div class="sbody">
         <label class="slabel" for="discount">Future sale or discount (optional)</label>
@@ -274,10 +264,10 @@
 
   <!-- Alerts -->
   <div class="alert alert-error" id="alert-denom-error" role="alert">
-    <strong>Margin too high:</strong> Your profit goal cannot equal or exceed your plan share percentage. Either lower your margin goal or switch to a higher-share plan.
+    <strong>Margin too high:</strong> Your profit goal cannot equal or exceed your take home rate. Lower your margin goal to proceed.
   </div>
   <div class="alert alert-warn" id="alert-denom-small" role="alert">
-    <strong>Heads up — extreme result:</strong> Your margin goal is very close to your plan share, which produces an unusually high price. Consider lowering your margin slightly for a realistic listing price.
+    <strong>Heads up, extreme result:</strong> Your margin goal is very close to your take home rate, which produces an unusually high price. Consider lowering your margin slightly for a realistic listing price.
   </div>
 
   <div class="divider" role="presentation">
@@ -325,7 +315,7 @@
     <div class="srow"><span>Box and packing</span><span id="s-ful">$0.00</span></div>
     <div class="srow"><span>Shipping label</span><span id="s-ship">$0.00</span></div>
     <div class="srow stotal"><span>Total costs</span><span id="s-total">$0.00</span></div>
-    <div class="srow ssep"><span id="s-plan-lbl">Plan share</span><span id="s-plan-val">0.75</span></div>
+    <div class="srow ssep"><span id="s-share-lbl">Your take home</span><span id="s-share-val">0.75</span></div>
     <div class="srow"><span id="s-margin-lbl">Profit goal</span><span id="s-margin-val">0.25</span></div>
     <div class="srow" id="s-discount-row" style="display:none;"><span id="s-discount-lbl">Sale discount buffer</span><span id="s-discount-val">0.00</span></div>
     <div class="srow stotal"><span>Effective net share</span><span id="s-net">0.50</span></div>
@@ -333,7 +323,7 @@
 
   <!-- Smart shipping warning -->
   <div class="smart-warning" id="smart-warning" role="alert" aria-live="polite">
-    <div class="sw-title"><span class="sw-icon" aria-hidden="true">⚠</span><span id="sw-title-text">Heads up — shipping label cost missing</span></div>
+    <div class="sw-title"><span class="sw-icon" aria-hidden="true">⚠</span><span id="sw-title-text">Heads up, shipping label cost is $0.00</span></div>
     <div id="sw-body"></div>
     <div class="sw-suggest" id="sw-suggest"></div>
   </div>
@@ -348,7 +338,8 @@
   // =====================
   // CONSTANTS
   // =====================
-  const PLAN_SHARES = Object.freeze({ connect: 0.75, basic: 0.65 });
+  const MIN_TAKEHOME = 1;
+  const MAX_TAKEHOME = 99;
   const FREE_SHIPPING_THRESHOLD = 80;
   const MAX_REASONABLE_MSRP = 10000;
   const HIGH_INPUT_WARNING = 999.99;
@@ -359,15 +350,13 @@
   const EXTREME_DENOMINATOR = 0.05;
   const MIN_BUNDLE = 1;
   const MAX_BUNDLE = 50;
-  const DEFAULT_MARGIN = 25;
   const TYPICAL_SHIPPING_COST = 10.50;
-  const HELP_CENTER_URL = 'https://bubblegoods.zendesk.com/hc/en-us/articles/29659182467604-Selling-on-Bubble-Goods-Plans-Fees-Fulfillment-Overview';
 
   // =====================
   // STATE
   // =====================
-  let plan = null; // No plan selected by default; seller must actively choose
-  const dom = {}; // DOM cache, populated by cacheElements()
+  let takehome = null; // Percentage (1-99) the seller keeps; null until entered
+  const dom = {};      // DOM cache, populated by cacheElements()
 
   // =====================
   // UTILS
@@ -407,11 +396,11 @@
   // =====================
   function cacheElements() {
     const ids = [
-      'btn-connect', 'btn-basic',
+      'takehome', 'takehome-err', 'takehome-warn',
       'cogs', 'cogs-err', 'cogs-warn',
       'bundle', 'bundle-minus', 'bundle-plus', 'bundle-hint', 'bundle-warn',
       'fulfillment', 'ful-err', 'ful-warn',
-      'shipping', 'shipping-card', 'ship-desc', 'ship-err', 'ship-warn',
+      'shipping', 'ship-err', 'ship-warn',
       'total-display',
       'margin', 'margin-display', 'margin-warn',
       'discount', 'discount-display', 'discount-warn',
@@ -419,7 +408,7 @@
       'result-badges', 'msrp-output', 'msrp-hint',
       'sale-preview', 'sale-pct', 'sale-price', 'sale-revenue', 'sale-costs', 'sale-profit', 'sale-profit-row',
       'summary-box', 's-cogs', 's-bundle', 's-prod-total', 's-ful', 's-ship', 's-total',
-      's-plan-lbl', 's-plan-val', 's-margin-lbl', 's-margin-val',
+      's-share-lbl', 's-share-val', 's-margin-lbl', 's-margin-val',
       's-discount-row', 's-discount-lbl', 's-discount-val', 's-net',
       'smart-warning', 'sw-title-text', 'sw-body', 'sw-suggest'
     ];
@@ -447,7 +436,6 @@
   function hideAlert(el) { if (el) el.classList.remove('visible'); }
 
   // Safely build markup with bold spans / links without using innerHTML for user data.
-  // parts: array of strings or { text, bold } or { text, link }
   function buildMixedText(parts) {
     const frag = document.createDocumentFragment();
     parts.forEach(function (p) {
@@ -478,45 +466,65 @@
     if (node) el.appendChild(node);
   }
 
-  // Renumber visible step cards 1..N so hiding a step doesn't leave a gap.
-  function renumberSteps() {
-    const cards = document.querySelectorAll('.step-card[data-step]');
-    let n = 0;
-    cards.forEach(function (card) {
-      if (card.classList.contains('hidden')) return;
-      n++;
-      const snum = card.querySelector('.snum');
-      if (snum) snum.textContent = String(n);
-    });
-  }
-
   // =====================
   // EVENT HANDLERS
   // =====================
-  function setPlan(newPlan) {
-    plan = newPlan;
-    dom.btnConnect.setAttribute('aria-pressed', newPlan === 'connect' ? 'true' : 'false');
-    dom.btnBasic.setAttribute('aria-pressed', newPlan === 'basic' ? 'true' : 'false');
+  function onTakehomeInput() {
+    const raw = dom.takehome.value;
+    clearFieldMessages(dom.takehomeErr, dom.takehomeWarn);
+    dom.takehome.classList.remove('has-error');
 
-    if (newPlan === 'basic') {
-      // Hide the entire shipping step on Basic Plan
-      dom.shippingCard.classList.add('hidden');
-      dom.shipping.value = '0.00';
-      dom.shipping.setAttribute('readonly', 'true');
-      dom.shipping.classList.add('disabled-look');
-    } else {
-      // Connect Plan: show step 5 with a description that links to the help center
-      dom.shippingCard.classList.remove('hidden');
-      replaceChildren(dom.shipDesc, buildMixedText([
-        'For more information regarding our plans, please refer to this ',
-        { text: 'Help Center Article', link: HELP_CENTER_URL }
-      ]));
-      dom.shipping.removeAttribute('readonly');
-      dom.shipping.classList.remove('disabled-look');
+    if (raw === '') {
+      takehome = null;
+      calc();
+      return;
     }
 
-    renumberSteps();
-    clearFieldMessages(dom.shipErr, dom.shipWarn);
+    const n = parseFloat(raw);
+    if (!Number.isFinite(n)) {
+      takehome = null;
+      calc();
+      return;
+    }
+
+    if (n < MIN_TAKEHOME || n > MAX_TAKEHOME) {
+      dom.takehome.classList.add('has-error');
+      setFieldMessage(dom.takehomeErr, 'Take home rate must be between ' + MIN_TAKEHOME + '% and ' + MAX_TAKEHOME + '%.');
+      takehome = null;
+      calc();
+      return;
+    }
+
+    takehome = n;
+    calc();
+  }
+
+  function onTakehomeBlur() {
+    const raw = dom.takehome.value;
+    dom.takehome.classList.remove('has-error');
+    clearFieldMessages(dom.takehomeErr, dom.takehomeWarn);
+
+    if (raw === '' || raw === null) {
+      takehome = null;
+      calc();
+      return;
+    }
+
+    const n = parseFloat(raw);
+    if (!Number.isFinite(n)) {
+      dom.takehome.value = '';
+      takehome = null;
+      calc();
+      return;
+    }
+
+    // Round to integer and clamp to valid range (HTML step="1" implies integer input)
+    let rounded = Math.round(n);
+    if (rounded < MIN_TAKEHOME) rounded = MIN_TAKEHOME;
+    else if (rounded > MAX_TAKEHOME) rounded = MAX_TAKEHOME;
+
+    dom.takehome.value = String(rounded);
+    takehome = rounded;
     calc();
   }
 
@@ -552,7 +560,7 @@
     }
     input.value = n.toFixed(2);
     if (n > HIGH_INPUT_WARNING) {
-      setFieldMessage(warnEl, 'This is a high value — double-check it looks right.');
+      setFieldMessage(warnEl, 'This is a high value, double-check it looks right.');
     }
     calc();
   }
@@ -576,17 +584,16 @@
     }
     const n = sanitizeInt(raw, MIN_BUNDLE, MAX_BUNDLE);
     dom.bundleHint.textContent = n === 1 ? 'Single item' : n + '-pack bundle';
+    if (n >= HIGH_BUNDLE_WARNING) {
+      setFieldMessage(dom.bundleWarn, 'A large bundle is unusual, double-check this is intentional.');
+    }
     calc();
   }
 
   function onBundleBlur() {
+    // Normalize display value to a valid integer; onBundleInput handles messaging + calc
     const n = sanitizeInt(dom.bundle.value, MIN_BUNDLE, MAX_BUNDLE);
     dom.bundle.value = String(n);
-    dom.bundle.classList.remove('has-error');
-    setFieldMessage(dom.bundleWarn, '');
-    if (n >= HIGH_BUNDLE_WARNING) {
-      setFieldMessage(dom.bundleWarn, 'A large bundle is unusual — double-check this is intentional.');
-    }
     onBundleInput();
   }
 
@@ -617,14 +624,14 @@
   // =====================
   // BADGE RENDERING (no innerHTML)
   // =====================
-  function renderBadges(share, bundleSize, discountPct) {
+  function renderBadges(bundleSize, discountPct) {
     const container = dom.resultBadges;
     while (container.firstChild) container.removeChild(container.firstChild);
 
-    const planBadge = document.createElement('span');
-    planBadge.className = 'result-badge';
-    planBadge.textContent = (plan === 'connect' ? 'Connect' : 'Basic') + ' · ' + Math.round(share * 100) + '%';
-    container.appendChild(planBadge);
+    const takehomeBadge = document.createElement('span');
+    takehomeBadge.className = 'result-badge';
+    takehomeBadge.textContent = takehome + '% take home';
+    container.appendChild(takehomeBadge);
 
     if (bundleSize > 1) {
       const bundleBadge = document.createElement('span');
@@ -641,35 +648,29 @@
   }
 
   // =====================
-  // SMART WARNING
+  // SMART WARNING (plan-agnostic)
   // =====================
   function renderSmartWarning(cogs, fulfillment, shipping) {
     dom.smartWarning.classList.remove('visible');
 
-    if (plan !== 'connect') return;
-
-    // Don't show until user has started entering data
+    // Only show once the seller has started entering costs
     if (cogs <= 0 && fulfillment <= 0) return;
 
-    // If shipping is entered, no warning
+    // If shipping is entered, no reminder needed
     if (shipping > 0) return;
 
-    // Connect Plan + missing shipping cost = almost certainly a mistake
-    dom.swTitleText.textContent = 'Heads up — shipping label cost missing';
+    dom.swTitleText.textContent = 'Heads up, shipping label cost is $0.00';
 
     replaceChildren(dom.swBody, buildMixedText([
-      'On the Connect Plan, ',
-      { text: 'you are responsible for the shipping label', bold: true },
-      ' whenever a customer\u2019s order crosses ',
+      'Some plans require you to cover the shipping label when a customer\u2019s order crosses ',
       { text: '$' + FREE_SHIPPING_THRESHOLD, bold: true },
-      ' — they get free shipping, but the label cost comes out of your pocket. Leaving this at $0.00 means the recommended price above may not protect your margin on larger orders.'
+      '. If yours does, leaving this at $0.00 means the recommended price above may not protect your margin on larger orders.'
     ]));
 
     replaceChildren(dom.swSuggest, buildMixedText([
-      { text: 'What to do: ', bold: true },
-      'Enter your actual shipping label cost in Step 5 — typically around ',
+      'If Bubble Goods covers shipping under your plan, you can ignore this. Otherwise, enter your typical shipping label cost (typically around ',
       { text: '$' + TYPICAL_SHIPPING_COST.toFixed(2), bold: true },
-      '.'
+      ').'
     ]));
 
     dom.smartWarning.classList.add('visible');
@@ -679,8 +680,8 @@
   // MAIN CALCULATION
   // =====================
   function calc() {
-    // No plan selected yet — skip all math (UI shows default state from initial HTML)
-    if (plan === null) {
+    // No take home rate entered yet, skip all math
+    if (takehome === null) {
       dom.msrpOutput.className = 'result-price muted';
       dom.msrpOutput.textContent = '—';
       dom.summaryBox.style.display = 'none';
@@ -696,11 +697,11 @@
       return;
     }
 
-    const share = PLAN_SHARES[plan];
+    const share = round3(takehome / 100);
     const cogs = sanitizeMoney(dom.cogs.value);
     const bundleSize = sanitizeInt(dom.bundle.value, MIN_BUNDLE, MAX_BUNDLE);
     const ful = sanitizeMoney(dom.fulfillment.value);
-    const ship = plan === 'basic' ? 0 : sanitizeMoney(dom.shipping.value);
+    const ship = sanitizeMoney(dom.shipping.value);
     const marginPct = parseInt(dom.margin.value, 10);
     const margin = marginPct / 100;
     const discountPct = parseInt(dom.discount.value, 10);
@@ -713,7 +714,7 @@
 
     // Update auto-fields and summary
     dom.totalDisplay.textContent = fmtMoney(total);
-    renderBadges(share, bundleSize, discountPct);
+    renderBadges(bundleSize, discountPct);
 
     dom.sCogs.textContent = fmtMoney(cogs);
     dom.sBundle.textContent = bundleSize === 1 ? '1 (single item)' : bundleSize + '-pack';
@@ -721,8 +722,8 @@
     dom.sFul.textContent = fmtMoney(ful);
     dom.sShip.textContent = fmtMoney(ship);
     dom.sTotal.textContent = fmtMoney(total);
-    dom.sPlanLbl.textContent = 'Plan share (' + Math.round(share * 100) + '%)';
-    dom.sPlanVal.textContent = share.toFixed(2);
+    dom.sShareLbl.textContent = 'Your take home (' + Math.round(share * 100) + '%)';
+    dom.sShareVal.textContent = share.toFixed(2);
     dom.sMarginLbl.textContent = 'Profit goal (' + marginPct + '%)';
     dom.sMarginVal.textContent = margin.toFixed(2);
 
@@ -745,7 +746,7 @@
     if ((share - margin) <= 0 || effectiveDenom <= 0) {
       dom.msrpOutput.className = 'result-price error-color';
       dom.msrpOutput.textContent = 'Cannot calculate';
-      dom.msrpHint.textContent = 'Your margin or discount makes profit impossible at this plan share.';
+      dom.msrpHint.textContent = 'Your margin or discount is too high for your take home rate.';
       dom.summaryBox.style.display = 'none';
       showAlert(dom.alertDenomError);
       return;
@@ -765,7 +766,7 @@
     if (!Number.isFinite(msrp) || msrp > MAX_REASONABLE_MSRP) {
       dom.msrpOutput.className = 'result-price error-color';
       dom.msrpOutput.textContent = 'Check inputs';
-      dom.msrpHint.textContent = 'Result is outside a reasonable range — review your values.';
+      dom.msrpHint.textContent = 'Result is outside a reasonable range, review your values.';
       dom.summaryBox.style.display = 'none';
       return;
     }
@@ -799,7 +800,7 @@
       dom.salePreview.classList.add('visible');
     }
 
-    // Smart shipping warning (Connect Plan + missing shipping)
+    // Smart shipping reminder (plan-agnostic)
     try {
       renderSmartWarning(cogs, ful, ship);
     } catch (err) {
@@ -812,8 +813,8 @@
   // EVENT WIRING
   // =====================
   function wireEvents() {
-    dom.btnConnect.addEventListener('click', function () { setPlan('connect'); });
-    dom.btnBasic.addEventListener('click', function () { setPlan('basic'); });
+    dom.takehome.addEventListener('input', onTakehomeInput);
+    dom.takehome.addEventListener('blur', onTakehomeBlur);
 
     dom.cogs.addEventListener('input', function () { onMoneyInput(dom.cogs, dom.cogsErr, dom.cogsWarn); });
     dom.cogs.addEventListener('blur', function () { onMoneyBlur(dom.cogs, dom.cogsErr, dom.cogsWarn); });
@@ -839,8 +840,7 @@
   document.addEventListener('DOMContentLoaded', function () {
     cacheElements();
     wireEvents();
-    renumberSteps(); // Step 5 starts hidden, so steps display as 1–7 until a plan is picked
-    calc();          // Will show "Select a plan" prompt since plan === null
+    calc(); // Will show default state since takehome === null
   });
 
 })();
