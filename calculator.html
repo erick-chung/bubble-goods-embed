@@ -15,13 +15,13 @@
   }
   .wrap { max-width: 580px; margin: 0 auto; }
 
-  /* ── Header ── */
+  /* header */
   .header { text-align: center; margin-bottom: 28px; }
   .eyebrow { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #0f6e56; background: #d4f2e7; border-radius: 99px; padding: 4px 14px; margin-bottom: 12px; }
   .main-title { font-size: 22px; font-weight: 700; color: #111; margin-bottom: 6px; }
   .main-sub { font-size: 13px; color: #777; line-height: 1.5; }
 
-  /* ── Step list ── */
+  /* step cards */
   .step-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
   .step-card { background: #FFFFE6; border: 1px solid rgba(0,0,0,0.1); border-radius: 12px; padding: 14px 16px; display: flex; align-items: flex-start; gap: 14px; }
   .step-card.dimmed { opacity: 0.72; }
@@ -33,7 +33,7 @@
   .sdesc a { color: #0f6e56; text-decoration: underline; font-weight: 600; }
   .sdesc a:hover { color: #074d35; }
 
-  /* ── Inputs ── */
+  /* inputs */
   .input-wrap { position: relative; }
   .ipfx { position: absolute; left: 9px; top: 50%; transform: translateY(-50%); font-size: 14px; font-weight: 600; color: #aaa; pointer-events: none; }
   .ipfx-suffix { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); font-size: 14px; font-weight: 600; color: #aaa; pointer-events: none; }
@@ -54,7 +54,7 @@
 
   .auto-val { font-size: 15px; font-weight: 700; color: #333; background: #FFFFC8; border: 1px solid rgba(0,0,0,0.08); border-radius: 8px; padding: 9px 12px; }
 
-  /* ── Sliders ── */
+  /* sliders */
   .slider-row { display: flex; align-items: center; gap: 12px; margin-top: 4px; }
   .slider-track { flex: 1; -webkit-appearance: none; appearance: none; height: 4px; border-radius: 2px; background: rgba(0,0,0,0.12); outline: none; cursor: pointer; }
   .slider-track::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; border-radius: 50%; background: #1d9e75; border: 2px solid rgba(255,255,255,0.9); cursor: pointer; }
@@ -65,7 +65,7 @@
   .slider-val { font-size: 15px; font-weight: 700; color: #111; min-width: 44px; text-align: right; }
   .slider-hint { font-size: 11px; color: #aaa; margin-top: 5px; }
 
-  /* ── Bundle stepper ── */
+  /* bundle stepper */
   .bundle-row { display: flex; align-items: center; gap: 10px; }
   .bundle-btn { width: 28px; height: 28px; border: 1.5px solid rgba(0,0,0,0.12); border-radius: 8px; background: #FFFFD2; font-size: 16px; font-weight: 700; color: #555; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-family: inherit; }
   .bundle-btn:hover { border-color: #1d9e75; color: #1d9e75; }
@@ -73,12 +73,12 @@
   .bundle-input { width: 60px; text-align: center; padding: 8px 0; }
   .bundle-hint { font-size: 12px; color: #999; }
 
-  /* ── Divider ── */
+  /* divider */
   .divider { display: flex; align-items: center; gap: 10px; margin: 20px 0 16px; }
   .divider-line { flex: 1; height: 1px; background: rgba(0,0,0,0.1); }
   .divider-text { font-size: 11px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: #bbb; }
 
-  /* ── Result card ── */
+  /* result card */
   .result-card { border: 2px solid #1d9e75; border-radius: 16px; overflow: hidden; margin-bottom: 14px; }
   .result-header { background: #d4f2e7; padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 6px; }
   .result-label-text { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #0f6e56; }
@@ -92,7 +92,7 @@
   .result-price.error-color { color: #c0392b; font-size: 22px; }
   .result-hint { font-size: 13px; color: #888; line-height: 1.5; }
 
-  /* ── Sale preview ── */
+  /* sale preview */
   .sale-preview { display: none; margin-top: 14px; padding-top: 14px; border-top: 1px dashed rgba(0,0,0,0.15); }
   .sale-preview.visible { display: block; }
   .sale-row { display: flex; justify-content: space-between; align-items: center; padding: 4px 0; font-size: 13px; color: #666; }
@@ -101,7 +101,7 @@
   .sale-row.profit-pos span:last-child { color: #0f6e56; }
   .sale-row.profit-neg span:last-child { color: #c0392b; }
 
-  /* ── Summary box ── */
+  /* summary box */
   .summary-box { background: #FFFFD2; border: 1px solid rgba(0,0,0,0.08); border-radius: 12px; padding: 14px 16px; margin-bottom: 12px; display: none; }
   .srow { display: flex; justify-content: space-between; font-size: 13px; padding: 3px 0; color: #666; }
   .srow span:last-child { font-weight: 600; color: #333; }
@@ -109,7 +109,7 @@
   .srow.stotal span:last-child { color: #111; }
   .srow.ssep { margin-top: 8px; }
 
-  /* ── Alerts ── */
+  /* alerts */
   .alert { display: none; border-radius: 10px; padding: 11px 14px; font-size: 12px; line-height: 1.55; margin-bottom: 10px; }
   .alert.visible { display: block; }
   .alert-warn { background: #fff8ec; border: 1px solid #f0c060; color: #7a5000; }
@@ -117,7 +117,7 @@
   .alert-error { background: #fff0f0; border: 1px solid #f5a0a0; color: #8b1a1a; }
   .alert-error strong { color: #6b0000; }
 
-  /* ── Smart shipping warning ── */
+  /* smart shipping warning */
   .smart-warning { display: none; background: #fff8ec; border: 1.5px solid #f0c060; border-radius: 12px; padding: 14px 16px; margin-bottom: 12px; font-size: 13px; color: #5a3800; line-height: 1.55; }
   .smart-warning.visible { display: block; }
   .smart-warning .sw-title { display: flex; align-items: center; gap: 6px; font-weight: 700; color: #5a3800; margin-bottom: 4px; font-size: 13px; }
@@ -125,7 +125,6 @@
   .smart-warning strong { color: #3a2400; }
   .smart-warning .sw-suggest { margin-top: 6px; padding-top: 6px; border-top: 1px dashed rgba(122,80,0,0.3); font-size: 12px; color: #7a5000; }
 
-  /* Screen reader only */
   .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
 </style>
 </head>
@@ -140,7 +139,6 @@
 
   <div class="step-list">
 
-    <!-- Step 1: Take home rate -->
     <div class="step-card">
       <div class="snum green" aria-hidden="true">1</div>
       <div class="sbody">
@@ -155,7 +153,6 @@
       </div>
     </div>
 
-    <!-- Step 2: Production cost -->
     <div class="step-card">
       <div class="snum green" aria-hidden="true">2</div>
       <div class="sbody">
@@ -170,7 +167,6 @@
       </div>
     </div>
 
-    <!-- Step 3: Bundle size -->
     <div class="step-card">
       <div class="snum green" aria-hidden="true">3</div>
       <div class="sbody">
@@ -186,7 +182,6 @@
       </div>
     </div>
 
-    <!-- Step 4: Fulfillment -->
     <div class="step-card">
       <div class="snum green" aria-hidden="true">4</div>
       <div class="sbody">
@@ -201,7 +196,6 @@
       </div>
     </div>
 
-    <!-- Step 5: Shipping label cost (always visible) -->
     <div class="step-card">
       <div class="snum green" aria-hidden="true">5</div>
       <div class="sbody">
@@ -216,7 +210,6 @@
       </div>
     </div>
 
-    <!-- Step 6: Total costs (auto) -->
     <div class="step-card dimmed">
       <div class="snum" aria-hidden="true">6</div>
       <div class="sbody">
@@ -230,7 +223,6 @@
       </div>
     </div>
 
-    <!-- Step 7: Margin slider -->
     <div class="step-card">
       <div class="snum green" aria-hidden="true">7</div>
       <div class="sbody">
@@ -245,7 +237,6 @@
       </div>
     </div>
 
-    <!-- Step 8: Discount slider -->
     <div class="step-card">
       <div class="snum green" aria-hidden="true">8</div>
       <div class="sbody">
@@ -262,7 +253,6 @@
 
   </div>
 
-  <!-- Alerts -->
   <div class="alert alert-error" id="alert-denom-error" role="alert">
     <strong>Margin too high:</strong> Your profit goal cannot equal or exceed your take home rate. Lower your margin goal to proceed.
   </div>
@@ -276,7 +266,6 @@
     <div class="divider-line"></div>
   </div>
 
-  <!-- Result -->
   <section class="result-card" aria-labelledby="result-label">
     <div class="result-header">
       <span class="result-label-text" id="result-label">Recommended listing price</span>
@@ -307,7 +296,6 @@
     </div>
   </section>
 
-  <!-- Summary -->
   <div class="summary-box" id="summary-box">
     <div class="srow"><span>Production cost (per unit)</span><span id="s-cogs">$0.00</span></div>
     <div class="srow"><span>Bundle size</span><span id="s-bundle">1</span></div>
@@ -321,7 +309,6 @@
     <div class="srow stotal"><span>Effective net share</span><span id="s-net">0.50</span></div>
   </div>
 
-  <!-- Smart shipping warning -->
   <div class="smart-warning" id="smart-warning" role="alert" aria-live="polite">
     <div class="sw-title"><span class="sw-icon" aria-hidden="true">⚠</span><span id="sw-title-text">Heads up, shipping label cost is $0.00</span></div>
     <div id="sw-body"></div>
@@ -331,36 +318,36 @@
 </div>
 
 <script>
+/* pricing calc for the zendesk help center - single file on purpose,
+   loaded via iframe from github pages. splitting = cache-bust headache
+   across multiple urls, not worth it at this size.
+
+   gotcha: HIGH_BUNDLE_WARNING has to stay in onBundleInput. onBundleBlur
+   ends with a call to onBundleInput which clears warnings, so anything
+   set in Blur gets wiped immediately. */
+
 'use strict';
 
 (function () {
 
-  // =====================
-  // CONSTANTS
-  // =====================
   const MIN_TAKEHOME = 1;
   const MAX_TAKEHOME = 99;
-  const FREE_SHIPPING_THRESHOLD = 80;
-  const MAX_REASONABLE_MSRP = 10000;
-  const HIGH_INPUT_WARNING = 999.99;
+  const MIN_BUNDLE = 1;
+  const MAX_BUNDLE = 50;
+  const HIGH_BUNDLE_WARNING = 12;
   const MIN_SAFE_MARGIN = 10;
   const MAX_SAFE_MARGIN = 45;
   const HIGH_DISCOUNT_WARNING = 50;
-  const HIGH_BUNDLE_WARNING = 12;
+  const HIGH_INPUT_WARNING = 1000;
+  const MAX_REASONABLE_MSRP = 10000;
   const EXTREME_DENOMINATOR = 0.05;
-  const MIN_BUNDLE = 1;
-  const MAX_BUNDLE = 50;
+  const FREE_SHIPPING_THRESHOLD = 80;
   const TYPICAL_SHIPPING_COST = 10.50;
 
-  // =====================
-  // STATE
-  // =====================
-  let takehome = null; // Percentage (1-99) the seller keeps; null until entered
-  const dom = {};      // DOM cache, populated by cacheElements()
+  let takehome = null;
+  const dom = {};
 
-  // =====================
-  // UTILS
-  // =====================
+
   function sanitizeMoney(raw) {
     if (raw === '' || raw === null || raw === undefined) return 0;
     const n = parseFloat(raw);
@@ -383,17 +370,10 @@
     return sign + '$' + Math.abs(n).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   }
 
-  function round2(n) {
-    return Math.round(n * 100) / 100;
-  }
+  function round2(n) { return Math.round(n * 100) / 100; }
+  function round3(n) { return Math.round(n * 1000) / 1000; }
 
-  function round3(n) {
-    return Math.round(n * 1000) / 1000;
-  }
 
-  // =====================
-  // DOM CACHE
-  // =====================
   function cacheElements() {
     const ids = [
       'takehome', 'takehome-err', 'takehome-warn',
@@ -418,9 +398,6 @@
     });
   }
 
-  // =====================
-  // DOM HELPERS
-  // =====================
   function setFieldMessage(el, msg) {
     if (!el) return;
     el.textContent = msg;
@@ -435,7 +412,6 @@
   function showAlert(el) { if (el) el.classList.add('visible'); }
   function hideAlert(el) { if (el) el.classList.remove('visible'); }
 
-  // Safely build markup with bold spans / links without using innerHTML for user data.
   function buildMixedText(parts) {
     const frag = document.createDocumentFragment();
     parts.forEach(function (p) {
@@ -466,9 +442,7 @@
     if (node) el.appendChild(node);
   }
 
-  // =====================
-  // EVENT HANDLERS
-  // =====================
+
   function onTakehomeInput() {
     const raw = dom.takehome.value;
     clearFieldMessages(dom.takehomeErr, dom.takehomeWarn);
@@ -504,7 +478,7 @@
     dom.takehome.classList.remove('has-error');
     clearFieldMessages(dom.takehomeErr, dom.takehomeWarn);
 
-    if (raw === '' || raw === null) {
+    if (raw === '') {
       takehome = null;
       calc();
       return;
@@ -518,7 +492,7 @@
       return;
     }
 
-    // Round to integer and clamp to valid range (HTML step="1" implies integer input)
+    // round + clamp on blur
     let rounded = Math.round(n);
     if (rounded < MIN_TAKEHOME) rounded = MIN_TAKEHOME;
     else if (rounded > MAX_TAKEHOME) rounded = MAX_TAKEHOME;
@@ -527,6 +501,7 @@
     takehome = rounded;
     calc();
   }
+
 
   function onMoneyInput(input, errEl, warnEl) {
     clearFieldMessages(errEl, warnEl);
@@ -543,7 +518,13 @@
     clearFieldMessages(errEl, warnEl);
     input.classList.remove('has-error');
     const raw = input.value;
-    if (raw === '' || raw === null) { input.value = ''; calc(); return; }
+
+    if (raw === '') {
+      input.value = '';
+      calc();
+      return;
+    }
+
     const n = parseFloat(raw);
     if (!Number.isFinite(n)) {
       input.value = '';
@@ -565,6 +546,7 @@
     calc();
   }
 
+
   function adjustBundle(delta) {
     const current = sanitizeInt(dom.bundle.value, MIN_BUNDLE, MAX_BUNDLE);
     let next = current + delta;
@@ -584,6 +566,7 @@
     }
     const n = sanitizeInt(raw, MIN_BUNDLE, MAX_BUNDLE);
     dom.bundleHint.textContent = n === 1 ? 'Single item' : n + '-pack bundle';
+    // keep in here - onBundleBlur wipes this if set there
     if (n >= HIGH_BUNDLE_WARNING) {
       setFieldMessage(dom.bundleWarn, 'A large bundle is unusual, double-check this is intentional.');
     }
@@ -591,7 +574,7 @@
   }
 
   function onBundleBlur() {
-    // Normalize display value to a valid integer; onBundleInput handles messaging + calc
+    // normalize display, onBundleInput does the rest
     const n = sanitizeInt(dom.bundle.value, MIN_BUNDLE, MAX_BUNDLE);
     dom.bundle.value = String(n);
     onBundleInput();
@@ -621,9 +604,7 @@
     calc();
   }
 
-  // =====================
-  // BADGE RENDERING (no innerHTML)
-  // =====================
+
   function renderBadges(bundleSize, discountPct) {
     const container = dom.resultBadges;
     while (container.firstChild) container.removeChild(container.firstChild);
@@ -647,18 +628,8 @@
     }
   }
 
-  // =====================
-  // SMART WARNING (plan-agnostic)
-  // =====================
-  function renderSmartWarning(cogs, fulfillment, shipping) {
-    dom.smartWarning.classList.remove('visible');
-
-    // Only show once the seller has started entering costs
-    if (cogs <= 0 && fulfillment <= 0) return;
-
-    // If shipping is entered, no reminder needed
-    if (shipping > 0) return;
-
+  // static content, build once at init
+  function buildSmartWarningContent() {
     dom.swTitleText.textContent = 'Heads up, shipping label cost is $0.00';
 
     replaceChildren(dom.swBody, buildMixedText([
@@ -672,24 +643,23 @@
       { text: '$' + TYPICAL_SHIPPING_COST.toFixed(2), bold: true },
       ').'
     ]));
-
-    dom.smartWarning.classList.add('visible');
   }
 
-  // =====================
-  // MAIN CALCULATION
-  // =====================
+  function renderSmartWarning(cogs, fulfillment, shipping) {
+    const shouldShow = (cogs > 0 || fulfillment > 0) && shipping <= 0;
+    dom.smartWarning.classList.toggle('visible', shouldShow);
+  }
+
+
   function calc() {
-    // No take home rate entered yet, skip all math
+    // nothing to do until seller enters take home
     if (takehome === null) {
       dom.msrpOutput.className = 'result-price muted';
       dom.msrpOutput.textContent = '—';
       dom.summaryBox.style.display = 'none';
       dom.totalDisplay.textContent = '$0.00';
-      // Clear all badges
       const container = dom.resultBadges;
       while (container.firstChild) container.removeChild(container.firstChild);
-      // Hide all alerts and previews
       hideAlert(dom.alertDenomError);
       hideAlert(dom.alertDenomSmall);
       dom.salePreview.classList.remove('visible');
@@ -712,7 +682,6 @@
     const saleFactor = round3(1 - discount);
     const effectiveDenom = round3((share - margin) * saleFactor);
 
-    // Update auto-fields and summary
     dom.totalDisplay.textContent = fmtMoney(total);
     renderBadges(bundleSize, discountPct);
 
@@ -722,7 +691,7 @@
     dom.sFul.textContent = fmtMoney(ful);
     dom.sShip.textContent = fmtMoney(ship);
     dom.sTotal.textContent = fmtMoney(total);
-    dom.sShareLbl.textContent = 'Your take home (' + Math.round(share * 100) + '%)';
+    dom.sShareLbl.textContent = 'Your take home (' + takehome + '%)';
     dom.sShareVal.textContent = share.toFixed(2);
     dom.sMarginLbl.textContent = 'Profit goal (' + marginPct + '%)';
     dom.sMarginVal.textContent = margin.toFixed(2);
@@ -736,28 +705,27 @@
     }
     dom.sNet.textContent = effectiveDenom.toFixed(3);
 
-    // Reset all alerts
     hideAlert(dom.alertDenomError);
     hideAlert(dom.alertDenomSmall);
     dom.salePreview.classList.remove('visible');
-    dom.smartWarning.classList.remove('visible');
 
-    // Denominator validation
+    // denom zero or neg = math breaks
     if ((share - margin) <= 0 || effectiveDenom <= 0) {
       dom.msrpOutput.className = 'result-price error-color';
       dom.msrpOutput.textContent = 'Cannot calculate';
       dom.msrpHint.textContent = 'Your margin or discount is too high for your take home rate.';
       dom.summaryBox.style.display = 'none';
       showAlert(dom.alertDenomError);
+      dom.smartWarning.classList.remove('visible');
       return;
     }
 
-    // No costs entered yet
     if (total === 0) {
       dom.msrpOutput.className = 'result-price muted';
       dom.msrpOutput.textContent = '—';
       dom.msrpHint.textContent = 'Fill in your costs above to see your recommendation';
       dom.summaryBox.style.display = 'none';
+      dom.smartWarning.classList.remove('visible');
       return;
     }
 
@@ -768,6 +736,7 @@
       dom.msrpOutput.textContent = 'Check inputs';
       dom.msrpHint.textContent = 'Result is outside a reasonable range, review your values.';
       dom.summaryBox.style.display = 'none';
+      dom.smartWarning.classList.remove('visible');
       return;
     }
 
@@ -785,7 +754,6 @@
     }
     dom.summaryBox.style.display = 'block';
 
-    // Sale preview
     if (discountPct > 0) {
       const salePrice = round2(msrp * saleFactor);
       const saleRevenue = round2(salePrice * share);
@@ -800,18 +768,10 @@
       dom.salePreview.classList.add('visible');
     }
 
-    // Smart shipping reminder (plan-agnostic)
-    try {
-      renderSmartWarning(cogs, ful, ship);
-    } catch (err) {
-      dom.smartWarning.classList.remove('visible');
-      console.error('Warning render error:', err);
-    }
+    renderSmartWarning(cogs, ful, ship);
   }
 
-  // =====================
-  // EVENT WIRING
-  // =====================
+
   function wireEvents() {
     dom.takehome.addEventListener('input', onTakehomeInput);
     dom.takehome.addEventListener('blur', onTakehomeBlur);
@@ -834,13 +794,11 @@
     dom.discount.addEventListener('input', onDiscountInput);
   }
 
-  // =====================
-  // INIT
-  // =====================
   document.addEventListener('DOMContentLoaded', function () {
     cacheElements();
+    buildSmartWarningContent();
     wireEvents();
-    calc(); // Will show default state since takehome === null
+    calc();
   });
 
 })();
